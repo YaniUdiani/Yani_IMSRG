@@ -1,2 +1,2 @@
 # Yani_IMSRG
-Magnus code
+This repository contains my current version of Magnus IMSRG
