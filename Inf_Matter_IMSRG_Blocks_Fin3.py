@@ -23,8 +23,8 @@ Created on Thu May 26 10:52:03 2019
  
 #I didn't really see much speed up using Nmax=0 and ds=0.1
 #However, with a step size of ds=1, I see substantial speed up with
-#little discrepancy in the energy.  With the adaptive 
-#solver, E_g.s=-102.66193193, with Euler, E_g.s=-102.66193818
+#little discrepancy in the energy. With the adaptive 
+#solver, E_g.s=-102.66193193 MeV, with Euler, E_g.s=-102.66193818 MeV
 #I can use large step sizes because exp(Omega) is still unitary
 #despite large errors in Omega.
 #------------------------------------------------------------------------------
@@ -211,7 +211,7 @@ def pair_selector(bas_block2B, particles, holes):
 class OP_Map:#class maps to a given operator allowing calls to that operator's elements. These OPs are of the form [[]]
 #This class is super useful because it allows me to keep a similar indexing structure of a single matrix even though I'm
 #Using a list of block matrices for my operators
-    def __init__(self, list_obj,idp):#use operator and bas_block2B to define self since those are universally
+    def __init__(self, list_obj,idp):#use operator and idp to define self since those are universally
         self.list_obj = list_obj#called in the functions below
         self.idp = idp
         
@@ -241,7 +241,8 @@ class OP_Map:#class maps to a given operator allowing calls to that operator's e
         second = self.idp[pairs[1]]
         if( first[0] == second[0] ):#if they are in the same block
             self.list_obj[first[0]][first[1], second[1]] -= val    
-            
+
+#Quick test to ensure that OP_Map does what it needs to do            
 def OP_Map_Test(bas2B, block_sizes, bas_block2B, idp , H2B):
     
     H2B_Test = copy.deepcopy(H2B)
@@ -302,7 +303,7 @@ def ph_transform_2B(x,y,occphA_2B, block_sizes,bas_block2B,bas2B,bs_len,idp):
   List_Prod=[]
   blocks_that_matter=[]    
   
-  for row in range(len(occphA_2B)): #get PH transformation on y for each row that matters
+  for row in range(len(occphA_2B)): #get PH transformation on y for each row that matters in Occ*ph(Y)
       
       BN=occphA_2B[row][1]#block number that is being considered
       blocks_that_matter+= bas_block2B[BN] #for computing PH trans on x
@@ -316,13 +317,13 @@ def ph_transform_2B(x,y,occphA_2B, block_sizes,bas_block2B,bas2B,bs_len,idp):
 
       List_Prod.append(y_ph) #append new row of block matrices
       
-  Mat_Prod=block(List_Prod) #convert into full matrix from rows of blocks
+  Mat_Prod=block(List_Prod) #convert list into full matrix from rows of blocks
   x_ph=np.zeros((len(bas2B),len(blocks_that_matter))) 
   
   for i1, (a,b) in enumerate(bas2B):
     for i2, (c, d) in enumerate(blocks_that_matter):#only use columns that matter to construct x_ph
       x_ph[i1, i2] -= OP_Map(x,idp)[[(a,d),(c,b)]]
-  return dot(x_ph,Mat_Prod)
+  return dot(x_ph, Mat_Prod)
 
         
 def inverse_ph_transform_2B(Gamma_ph, block_sizes,idx2B,bas_block2B,bs_len,idp):
@@ -605,7 +606,7 @@ def special_commutator(x, y, user_data,sign): # takes in either 1 or 2 body matr
                     OP_Map(Output_2B,idp)[[(l,k),(i,j)]]= -sign * mval
                     OP_Map(Output_2B,idp)[[(l,k),(j,i)]]= sign * mval
                     
-                del Hermitian[Hermitian.index((i,j))] #delete (i,j) so it does show up in (k,l) since transpose is manually coded
+                del Hermitian[Hermitian.index((i,j))] #delete (i,j) so it does show up in Hermitian since transpose is manually coded
                     
                             
     if(type(x) == np.ndarray and type(y) == list):#1B-2B 
@@ -641,7 +642,7 @@ def special_commutator(x, y, user_data,sign): # takes in either 1 or 2 body matr
                     OP_Map(Output_2B,idp)[[(l,k),(i,j)]]= -sign * mval
                     OP_Map(Output_2B,idp)[[(l,k),(j,i)]]= sign * mval
                     
-                del Hermitian[Hermitian.index((i,j))] #delete (i,j) so it does show up in (k,l) since transpose is manually coded
+                del Hermitian[Hermitian.index((i,j))] #delete (i,j) so it does show up in Hermitian since transpose is manually coded
 
     if(type(x) == list and type(y) == list):# 2B-2B
         
@@ -654,8 +655,8 @@ def special_commutator(x, y, user_data,sign): # takes in either 1 or 2 body matr
         bracket = List_operation(xy, Transpose, block_sizes,sign,"List_Add", bs_len)
         Output_2B = List_operation(bracket, 0.5, block_sizes,sign,"Scalar_Mul", bs_len)
         
-        xy_ph=ph_transform_2B(x,y,occphA_2B, block_sizes,bas_block2B,bas2B,bs_len,idp)
-        xyi=inverse_ph_transform_2B(xy_ph, block_sizes,idx2B,bas_block2B,bs_len,idp)
+        xy_ph = ph_transform_2B(x,y,occphA_2B, block_sizes,bas_block2B,bas2B,bs_len,idp)
+        xyi = inverse_ph_transform_2B(xy_ph, block_sizes,idx2B,bas_block2B,bs_len,idp)
         
         if(sign == 1):
             for block_num in bs_len:# go through blocks
@@ -711,7 +712,7 @@ def special_commutator(x, y, user_data,sign): # takes in either 1 or 2 body matr
                     OP_Map(Output_2B,idp)[[(q,j),(r,p)]]= -sign * mval
                     OP_Map(Output_2B,idp)[[(q,j),(p,r)]]= sign * mval
                     
-                del Hermitian[Hermitian.index((r,p))] #delete (r,p) so it does show up in (j,q) since transpose is manually coded
+                del Hermitian[Hermitian.index((r,p))] #delete (r,p) so it does show up in Hermitian since transpose is manually coded
                     
     return Output_0B, Output_1B, Output_2B   
 
@@ -782,7 +783,7 @@ def Transformed_Ham(Omega_1B, Omega_2B, user_data):# Generates new Hamiltonian b
             C_1B_1B=special_commutator(Omega_1B,nth_1B, user_data, +1)#store one body-one body commutator
             C_1B_2B=special_commutator(Omega_1B,nth_2B, user_data, +1)#store one body-two body commutator
             C_2B_1B=special_commutator(Omega_2B,nth_1B, user_data, +1)#store two body-one body commutator
-            C_2B_2B=special_commutator(Omega_2B,nth_2B, user_data, +1)#store two body-two body commutator; -1 for anti-hermitian 2B piece
+            C_2B_2B=special_commutator(Omega_2B,nth_2B, user_data, +1)#store two body-two body commutator; +1 for hermitian 2B piece
             # The next lines aggregate the current 0B, 1B, and 2B nth commutators from the Magnus expansion
             nth_0B=C_1B_1B[0]+C_2B_2B[0] #extract zero body terms       
             nth_1B=C_1B_1B[1]+C_1B_2B[1]+C_2B_1B[1]+C_2B_2B[1] #extract one body terms
@@ -797,8 +798,8 @@ def Transformed_Ham(Omega_1B, Omega_2B, user_data):# Generates new Hamiltonian b
         shiftymatrix_1B=nth_1B/np.math.factorial(n)
         
         shiftymatrix_2B=List_operation(nth_2B, 1/np.math.factorial(n), block_sizes,"NA","Scalar_Mul", bs_len)
-        if ((LA.norm(shiftymatrix_1B)+ calc_full2B_norm(shiftymatrix_2B, subset2B,bs_len,idp)) < 1e-10 ):
-        #if (abs(shiftymatrix_0B) < 1e-4 ):#MeV
+        #if ((LA.norm(shiftymatrix_1B)+ calc_full2B_norm(shiftymatrix_2B, subset2B,bs_len,idp)) < 1e-10 ):
+        if (abs(shiftymatrix_0B) < 1e-4 ):#MeV
             #print(n)
             break        
         H_0B+=shiftymatrix_0B
@@ -972,7 +973,7 @@ def Inf_Matter_Ham(full_state, energy_const, Combined_consts, k_alpha, degen, L,
                 H2B[blocky][block_loc_sr,block_loc_pq]= H2B[blocky][block_loc_pq,block_loc_sr]
                 H2B[blocky][block_loc_rs,block_loc_qp]= H2B[blocky][block_loc_qp,block_loc_rs]
                 H2B[blocky][block_loc_sr,block_loc_qp]= H2B[blocky][block_loc_qp,block_loc_sr]
-            del Hermitian[Hermitian.index((p,q))] #delete (p,q) so it does show up in (r,s) since transpose is manually coded
+            del Hermitian[Hermitian.index((p,q))] #delete (p,q) so it does show up in Hermitian since transpose is manually coded
                     
     return H1B, H2B
  
@@ -1098,7 +1099,7 @@ def calc_mbpt3(f, Gamma, user_data):
 
 def main():
   ####Can change N_Max (determines # of particles),rho (determines size of box and Fermi lvl), and degen (type of matter) ######
-  N_Max=0 #Define N_Max
+  N_Max=1 #Define N_Max
   rho=0.2 #Define density in fm^-3
   degen=2#If degen=4, then the matter is symmetric and isospin projections are considered. If degen=2, there is only
   #one type of particle, so isospin projections are not considered. Degen is only either 2 or 4. 
@@ -1132,7 +1133,7 @@ def main():
   #dim2B = dim1B * dim1B
   # basis definitions
   bas1B     = range(dim1B)
-  bas2B,subset2B,block_sizes,bas_block2B=construct_basis_2B(full_state,states)
+  bas2B,subset2B,block_sizes,bas_block2B = construct_basis_2B(full_state,states)
   Particle_P,Hole_H,Particle_A,Hole_A = pair_selector(bas_block2B, particles, holes)
   bs_len = range(len(block_sizes)) #:O
   #basph2B   = construct_basis_ph2B(holes, particles)
@@ -1220,9 +1221,9 @@ def main():
   ds = 1
   num_points = (sfinal-sinitial)/ds +1
   flow_pars = np.linspace(sinitial,sfinal,int(num_points))
-  print( "Reference Energy:", E)
+  print( "Reference Energy (MeV):", E)
   
-  print ("%-14s   %-14s   %-14s   %-14s   %-14s  %-14s   %-14s   %-14s"%(
+  print ("%-14s   %-11s   %-14s   %-14s   %-14s  %-14s   %-14s   %-14s"%(
     "s", "E" , "DE(2)", "DE(3)", "E+DE", 
     "||eta||", "||fod||", "||Gammaod||"))
   # print "-----------------------------------------------------------------------------------------------------------------"
@@ -1256,4 +1257,4 @@ def main():
 #------------------------------------------------------------------------------
 if __name__ == "__main__": 
   main()
-plt.plot(flow, energy)
+#plt.plot(flow, energy)
