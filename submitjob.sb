@@ -1,0 +1,47 @@
+#!/bin/bash --login
+########## SBATCH Lines for Resource Request ##########
+
+#SBATCH --time=00:8:00             # limit of wall clock time - how long the job will run (same as -t)
+#SBATCH --nodes=1                 # number of different nodes - could be an exact number or a range of nodes (same as -N)
+#SBATCH --ntasks=1                  # number of tasks - how many tasks (nodes) that you require (same as -n)
+#SBATCH --cpus-per-task=20           # number of CPUs (or cores) per task (same as -c)
+#SBATCH --mem-per-cpu=20G            # memory required per allocated CPU (or core) - amount of memory (in bytes)
+#SBATCH --job-name Thnx Mike      # you can give your job a name for easier identification (same as -J)
+
+########## Command Lines to Run ##########
+
+module purge
+module load GCC/6.4.0-2.28 OpenMPI  ### load necessary modules, e.g.
+
+#cd Yani_IMSRG                  ### change to the directory where your code is located
+
+#export OMP_ NUM_THREADS=2
+srun -n 1 ./a.out              ### call your executable (similar to mpirun) 
+#srun -n 20 ./a.out              ### call your executable (similar to mpirun) 
+
+#export OMP_ NUM_THREADS=8
+#srun -n 2 ./a.out              ### call your executable (similar to mpirun) 
+
+#export OMP_ NUM_THREADS=16
+#srun -n 2 ./a.out              ### call your executable (similar to mpirun) 
+
+#export OMP_ NUM_THREADS=32
+#srun -n 2 ./a.out              ### call your executable (similar to mpirun) 
+
+#export OMP_ NUM_THREADS=64
+#srun -n 2 ./a.out              ### call your executable (similar to mpirun) 
+
+#export OMP_ NUM_THREADS=128
+#srun -n 2 ./a.out              ### call your executable (similar to mpirun) 
+
+#export OMP_ NUM_THREADS=256
+#srun -n 2 ./a.out              ### call your executable (similar to mpirun) 
+
+#export OMP_ NUM_THREADS=512
+#srun -n 2 ./a.out              ### call your executable (similar to mpirun) 
+
+#export OMP_ NUM_THREADS=1024
+#srun -n 2 ./a.out              ### call your executable (similar to mpirun) 
+
+
+scontrol show job $SLURM_JOB_ID     ### write job information to output file
