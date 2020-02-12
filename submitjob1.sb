@@ -11,7 +11,9 @@
 ########## Command Lines to Run ##########
 
 module purge
-module load GCC/6.4.0-2.28 OpenMPI  ### load necessary modules, e.g.
+module load icc/2015.1.133-GCC-4.9.2
+module load impi/5.0.2.044
+module load numpy
 
 cd Yani_IMSRG                  ### change to the directory where your code is located
 
