@@ -1,0 +1,6 @@
+/var/lib/slurmd/job54797260/slurm_script: line 16: cd: Yani_IMSRG: No such file or directory
+Traceback (most recent call last):
+  File "Exp4_Profiling2.py", line 34, in <module>
+    import numpy as np
+ImportError: No module named 'numpy'
+srun: error: qml-001: task 0: Exited with exit code 1
