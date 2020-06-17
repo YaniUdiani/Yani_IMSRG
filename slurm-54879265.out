@@ -1,0 +1,17 @@
+/mnt/home/udianiom/.alias: line 4: alias: module purge; module load powertools; intel16: not found
+/var/lib/slurmd/job54879265/slurm_script: line 18: cd: Yani_IMSRG: No such file or directory
+Traceback (most recent call last):
+  File "Exp4_Profiling2.py", line 34, in <module>
+    import numpy as np
+  File "/opt/software/numpy/1.8.2-intel-2015a-Python-2.7.9/lib/python2.7/site-packages/numpy/__init__.py", line 153, in <module>
+    from . import add_newdocs
+  File "/opt/software/numpy/1.8.2-intel-2015a-Python-2.7.9/lib/python2.7/site-packages/numpy/add_newdocs.py", line 13, in <module>
+    from numpy.lib import add_newdoc
+  File "/opt/software/numpy/1.8.2-intel-2015a-Python-2.7.9/lib/python2.7/site-packages/numpy/lib/__init__.py", line 8, in <module>
+    from .type_check import *
+  File "/opt/software/numpy/1.8.2-intel-2015a-Python-2.7.9/lib/python2.7/site-packages/numpy/lib/type_check.py", line 11, in <module>
+    import numpy.core.numeric as _nx
+  File "/opt/software/numpy/1.8.2-intel-2015a-Python-2.7.9/lib/python2.7/site-packages/numpy/core/__init__.py", line 6, in <module>
+    from . import multiarray
+ImportError: dynamic module does not define init function (PyInit_multiarray)
+srun: error: skl-143: task 0: Exited with exit code 1

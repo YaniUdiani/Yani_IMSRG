@@ -1,0 +1,274 @@
+/mnt/home/udianiom/.alias: line 4: alias: module purge; module load powertools; intel16: not found
+/var/lib/slurmd/job54882684/slurm_script: line 14: cd: Yani_IMSRG: No such file or directory
+Box Size (fm):  6.910423230011183
+Number of SP states: 114
+Fraction of all pairs that contribute to ph_engine2:  0.00537988
+Fraction of all pairs that contribute to ph_engine1:  0.01078631
+Yaaay! OP_Map works as expected :-]
+Reference Energy (MeV): 950.4538
+s                E             DE(2)            DE(3)            E+DE            ||eta||          ||fod||          ||Gammaod||   
+----------------------------------------------------------------------------------------------------------------------------------
+ 0.00000   950.45380057      -7.42646545       0.00000000     943.02733512       1.02826907       0.00000000      64.14942966
+ 1.00000   942.97651109      -0.12918052       0.00000000     942.84733057       0.13986707       0.00000000       7.98554872
+ 2.00000   942.83342406      -0.00545793       0.00000000     942.82796613       0.03099657       0.00000000       1.51172257
+ 3.00000   942.82524093      -0.00033405       0.00000000     942.82490688       0.00766918       0.00000000       0.37182414
+ 4.00000   942.82457044      -0.00002243       0.00000000     942.82454801       0.00200894       0.00000000       0.09502632
+Time Taken to Run--- 10.4779 Minutes ---
+Correlation Energy (MeV): -7.6293
+Energy per particle (MeV): 14.2852
+         116735088 function calls (111492332 primitive calls) in 733.410 seconds
+
+   Ordered by: standard name
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.105    0.105  733.410  733.410 <string>:1(<module>)
+       17    0.000    0.000    0.000    0.000 Exp4_Profiling2.py:112(sign_gen)
+        5    0.058    0.012  292.713   58.543 Exp4_Profiling2.py:1186(RHS_Cal)
+      255    0.000    0.000    0.000    0.000 Exp4_Profiling2.py:119(<listcomp>)
+        5    0.000    0.000    0.008    0.002 Exp4_Profiling2.py:1196(<listcomp>)
+        5    0.054    0.011  332.451   66.490 Exp4_Profiling2.py:1232(Transformed_Ham)
+        5    0.000    0.000    0.007    0.001 Exp4_Profiling2.py:1245(<listcomp>)
+        1    0.000    0.000    0.000    0.000 Exp4_Profiling2.py:128(sorter)
+       10    0.003    0.000    0.008    0.001 Exp4_Profiling2.py:1285(get_operator_from_y)
+       10    0.003    0.000    0.452    0.045 Exp4_Profiling2.py:1304(List_reshape)
+        5    0.044    0.009  295.425   59.085 Exp4_Profiling2.py:1311(derivative_wrapper)
+   725334    4.598    0.000    5.186    0.000 Exp4_Profiling2.py:1345(radial_element)
+   241778    0.963    0.000    0.963    0.000 Exp4_Profiling2.py:1351(spin_exch_element)
+   241778    1.034    0.000    7.183    0.000 Exp4_Profiling2.py:1366(H2B_element)
+        1    0.962    0.962    9.529    9.529 Exp4_Profiling2.py:1403(Inf_Matter_Ham)
+        1    0.000    0.000    0.000    0.000 Exp4_Profiling2.py:141(One_BD_States)
+        1    0.000    0.000    0.003    0.003 Exp4_Profiling2.py:1416(<listcomp>)
+        1    3.737    3.737    4.111    4.111 Exp4_Profiling2.py:1455(normal_order)
+        1    0.000    0.000    0.000    0.000 Exp4_Profiling2.py:1464(<listcomp>)
+        1    0.001    0.001    0.001    0.001 Exp4_Profiling2.py:1465(<listcomp>)
+        5    0.078    0.016    0.118    0.024 Exp4_Profiling2.py:1494(calc_mbpt2)
+        1    0.064    0.064  733.305  733.305 Exp4_Profiling2.py:1589(main)
+        1    0.002    0.002    0.004    0.004 Exp4_Profiling2.py:1653(<listcomp>)
+        1    0.072    0.072    2.605    2.605 Exp4_Profiling2.py:170(construct_basis_2B)
+        1    0.000    0.000    0.003    0.003 Exp4_Profiling2.py:1732(<listcomp>)
+        1    0.000    0.000    0.000    0.000 Exp4_Profiling2.py:195(<listcomp>)
+      341    0.000    0.000    0.000    0.000 Exp4_Profiling2.py:200(<listcomp>)
+       57    0.000    0.000    0.000    0.000 Exp4_Profiling2.py:206(<listcomp>)
+       57    0.000    0.000    0.000    0.000 Exp4_Profiling2.py:208(<listcomp>)
+      284    0.001    0.000    0.001    0.000 Exp4_Profiling2.py:212(<listcomp>)
+        1    0.018    0.018    0.019    0.019 Exp4_Profiling2.py:235(pair_selector)
+        1    0.000    0.000    0.000    0.000 Exp4_Profiling2.py:237(<listcomp>)
+        1    0.000    0.000    0.000    0.000 Exp4_Profiling2.py:238(<listcomp>)
+        1    0.000    0.000    0.000    0.000 Exp4_Profiling2.py:239(<listcomp>)
+        1    0.000    0.000    0.000    0.000 Exp4_Profiling2.py:240(<listcomp>)
+        1    0.029    0.029    0.032    0.032 Exp4_Profiling2.py:264(subset_selector)
+        1    0.000    0.000    0.000    0.000 Exp4_Profiling2.py:266(<listcomp>)
+        1    0.000    0.000    0.000    0.000 Exp4_Profiling2.py:267(<listcomp>)
+       46    0.000    0.000    0.000    0.000 Exp4_Profiling2.py:296(__init__)
+  5263427    2.390    0.000    2.390    0.000 Exp4_Profiling2.py:300(__getitem__)
+       32    0.000    0.000    0.000    0.000 Exp4_Profiling2.py:308(__setitem__)
+      150    0.000    0.000    0.000    0.000 Exp4_Profiling2.py:335(__init__)
+ 46039444   28.017    0.000   28.017    0.000 Exp4_Profiling2.py:338(__getitem__)
+        1    0.000    0.000    0.005    0.005 Exp4_Profiling2.py:352(OP_Map_Test)
+        1    0.002    0.002    0.002    0.002 Exp4_Profiling2.py:390(construct_index_2B)
+        1    0.005    0.005    0.019    0.019 Exp4_Profiling2.py:400(special_index)
+    19437    0.031    0.000    0.031    0.000 Exp4_Profiling2.py:419(reverse_enumerate)
+        1    0.001    0.001    0.598    0.598 Exp4_Profiling2.py:424(ph_transfrom_preparation)
+        1    0.000    0.000    0.000    0.000 Exp4_Profiling2.py:426(<listcomp>)
+      266    0.024    0.000    0.597    0.002 Exp4_Profiling2.py:432(<listcomp>)
+        1   32.302   32.302   35.629   35.629 Exp4_Profiling2.py:439(engine1_iteration)
+    70756    0.996    0.000    0.996    0.000 Exp4_Profiling2.py:452(<listcomp>)
+        1   51.062   51.062   51.503   51.503 Exp4_Profiling2.py:493(engine2_iteration)
+        1    0.000    0.000    0.000    0.000 Exp4_Profiling2.py:497(<listcomp>)
+   166060   15.504    0.000   15.504    0.000 Exp4_Profiling2.py:518(ph_engine1)
+     6479   20.849    0.003   20.849    0.003 Exp4_Profiling2.py:524(ph_engine2)
+       19    3.150    0.166  513.414   27.022 Exp4_Profiling2.py:530(ph_transform_2B)
+       19   11.721    0.617   11.762    0.619 Exp4_Profiling2.py:590(inverse_ph_transform_2B)
+       19    0.003    0.000    0.041    0.002 Exp4_Profiling2.py:592(<listcomp>)
+       10    0.000    0.000    0.045    0.005 Exp4_Profiling2.py:650(commutator)
+        5    0.014    0.003    0.014    0.003 Exp4_Profiling2.py:656(calc_fod_norm)
+        5    0.086    0.017    0.156    0.031 Exp4_Profiling2.py:667(calc_Gammaod_norm)
+       20    3.828    0.191    6.410    0.321 Exp4_Profiling2.py:690(calc_full2B_norm)
+       76    0.000    0.000   13.530    0.178 Exp4_Profiling2.py:708(List_dot)
+       76    0.013    0.000   13.530    0.178 Exp4_Profiling2.py:709(<listcomp>)
+      165    0.001    0.000    0.612    0.004 Exp4_Profiling2.py:711(List_operation)
+       19    0.002    0.000    0.010    0.001 Exp4_Profiling2.py:714(<listcomp>)
+       85    0.433    0.005    0.433    0.005 Exp4_Profiling2.py:717(<listcomp>)
+       61    0.168    0.003    0.168    0.003 Exp4_Profiling2.py:720(<listcomp>)
+        1    0.000    0.000    0.000    0.000 Exp4_Profiling2.py:731(construct_occupation_1B)
+        2    0.012    0.006    0.018    0.009 Exp4_Profiling2.py:741(construct_occupationA_2B)
+        2    0.000    0.000    0.007    0.003 Exp4_Profiling2.py:742(<listcomp>)
+        1    0.006    0.006    0.010    0.010 Exp4_Profiling2.py:752(construct_occupationB_2B)
+        1    0.000    0.000    0.003    0.003 Exp4_Profiling2.py:753(<listcomp>)
+        1    0.006    0.006    0.009    0.009 Exp4_Profiling2.py:762(construct_occupationC_2B)
+        1    0.000    0.000    0.003    0.003 Exp4_Profiling2.py:763(<listcomp>)
+        6    0.374    0.062    0.588    0.098 Exp4_Profiling2.py:775(eta_white)
+        6    0.001    0.000    0.011    0.002 Exp4_Profiling2.py:805(<listcomp>)
+       17    0.000    0.000    0.000    0.000 Exp4_Profiling2.py:81(powerset)
+      102    0.000    0.000    0.000    0.000 Exp4_Profiling2.py:84(<genexpr>)
+        1    0.000    0.000    0.000    0.000 Exp4_Profiling2.py:852(Bernoulli_generator)
+        4    0.000    0.000    0.000    0.000 Exp4_Profiling2.py:853(bernoulli2)
+        1    0.000    0.000    0.000    0.000 Exp4_Profiling2.py:861(<listcomp>)
+       76   53.652    0.706  620.077    8.159 Exp4_Profiling2.py:873(special_commutator)
+        1    0.000    0.000    0.000    0.000 Exp4_Profiling2.py:91(full_state_gen_3D)
+       19    0.002    0.000    0.035    0.002 Exp4_Profiling2.py:917(<listcomp>)
+       19    0.002    0.000    0.021    0.001 Exp4_Profiling2.py:986(<listcomp>)
+    19208    0.008    0.000    0.090    0.000 _methods.py:25(_amax)
+    19208    0.006    0.000    0.043    0.000 _methods.py:28(_amin)
+   121230    0.029    0.000    0.351    0.000 _methods.py:40(_all)
+        2    0.000    0.000    0.000    0.000 _weakrefset.py:16(__init__)
+        2    0.000    0.000    0.000    0.000 _weakrefset.py:20(__enter__)
+        2    0.000    0.000    0.000    0.000 _weakrefset.py:26(__exit__)
+        2    0.000    0.000    0.000    0.000 _weakrefset.py:36(__init__)
+        2    0.000    0.000    0.000    0.000 _weakrefset.py:52(_commit_removals)
+        3    0.000    0.000    0.000    0.000 _weakrefset.py:58(__iter__)
+        5    0.000    0.000    0.000    0.000 _weakrefset.py:70(__contains__)
+        2    0.000    0.000    0.000    0.000 _weakrefset.py:81(add)
+        3    0.000    0.000    0.000    0.000 abc.py:178(__instancecheck__)
+      2/1    0.000    0.000    0.000    0.000 abc.py:194(__subclasscheck__)
+    19551    0.027    0.000    2.526    0.000 arrayprint.py:1358(array_str)
+    19551    0.048    0.000    0.048    0.000 arrayprint.py:310(_get_formatdict)
+    19551    0.036    0.000    1.322    0.000 arrayprint.py:319(<lambda>)
+    19551    0.082    0.000    1.466    0.000 arrayprint.py:363(_get_format_function)
+    19551    0.055    0.000    2.317    0.000 arrayprint.py:415(wrapper)
+    19551    0.096    0.000    2.243    0.000 arrayprint.py:432(_array2string)
+    19551    0.068    0.000    2.499    0.000 arrayprint.py:457(array2string)
+    58653    0.057    0.000    0.072    0.000 arrayprint.py:625(_extendLine)
+    19551    0.019    0.000    0.663    0.000 arrayprint.py:639(_formatArray)
+78204/19551    0.238    0.000    0.644    0.000 arrayprint.py:648(recurser)
+    19551    0.044    0.000    0.090    0.000 arrayprint.py:67(_make_options_dict)
+    19551    0.015    0.000    0.015    0.000 arrayprint.py:72(<dictcomp>)
+    19551    0.058    0.000    1.287    0.000 arrayprint.py:754(__init__)
+    19551    0.454    0.000    1.218    0.000 arrayprint.py:780(fillFormat)
+    78204    0.079    0.000    0.189    0.000 arrayprint.py:832(<genexpr>)
+    78204    0.040    0.000    0.251    0.000 arrayprint.py:837(<genexpr>)
+    78204    0.017    0.000    0.023    0.000 arrayprint.py:838(<genexpr>)
+    78204    0.013    0.000    0.018    0.000 arrayprint.py:839(<genexpr>)
+    58653    0.168    0.000    0.306    0.000 arrayprint.py:862(__call__)
+1732249/30    2.813    0.000   20.750    0.692 copy.py:132(deepcopy)
+  5084/30    0.710    0.000   20.750    0.692 copy.py:210(_deepcopy_list)
+  1732249    0.900    0.000    1.330    0.000 copy.py:252(_keep_alive)
+    19794    0.020    0.000    0.024    0.000 copy.py:66(copy)
+       12    0.000    0.000    0.000    0.000 fractions.py:274(numerator)
+       12    0.000    0.000    0.000    0.000 fractions.py:278(denominator)
+        3    0.000    0.000    0.000    0.000 fractions.py:374(forward)
+        3    0.000    0.000    0.000    0.000 fractions.py:386(reverse)
+        3    0.000    0.000    0.000    0.000 fractions.py:409(_sub)
+        3    0.000    0.000    0.000    0.000 fractions.py:417(_mul)
+        9    0.000    0.000    0.000    0.000 fractions.py:84(__new__)
+       20    0.000    0.000    0.642    0.032 fromnumeric.py:1427(ravel)
+      341    0.000    0.000    0.000    0.000 fromnumeric.py:1613(shape)
+     6840    0.003    0.000    0.020    0.000 fromnumeric.py:163(reshape)
+   121230    0.135    0.000    0.640    0.000 fromnumeric.py:2021(all)
+    19208    0.039    0.000    0.129    0.000 fromnumeric.py:2222(amax)
+    19208    0.024    0.000    0.067    0.000 fromnumeric.py:2323(amin)
+  1723414    0.179    0.000    0.179    0.000 fromnumeric.py:2632(ndim)
+    13319    0.005    0.000    0.022    0.000 fromnumeric.py:50(_wrapfunc)
+     6479    0.002    0.000    0.008    0.000 fromnumeric.py:529(transpose)
+        1    0.000    0.000    0.000    0.000 function_base.py:13(_index_deprecate)
+        1    0.000    0.000    0.000    0.000 function_base.py:25(linspace)
+       20    0.000    0.000    0.669    0.033 function_base.py:5114(append)
+       20    0.000    0.000    0.000    0.000 linalg.py:110(isComplexType)
+       20    0.001    0.000    0.002    0.000 linalg.py:2103(norm)
+        3    0.000    0.000    0.000    0.000 numbers.py:283(__float__)
+        1    0.000    0.000    0.000    0.000 numeric.py:1917(isscalar)
+    38416    0.073    0.000    0.168    0.000 numeric.py:2460(seterr)
+    38416    0.063    0.000    0.068    0.000 numeric.py:2560(geterr)
+    19208    0.017    0.000    0.021    0.000 numeric.py:2853(__init__)
+    19208    0.016    0.000    0.125    0.000 numeric.py:2857(__enter__)
+    19208    0.014    0.000    0.074    0.000 numeric.py:2862(__exit__)
+    19571    0.007    0.000    0.016    0.000 numeric.py:424(asarray)
+   126326    0.033    0.000    0.733    0.000 numeric.py:495(asanyarray)
+       16    0.000    0.000    0.001    0.000 numeric.py:83(zeros_like)
+       19    0.000    0.000    8.904    0.469 shape_base.py:182(vstack)
+       19    0.001    0.000    0.008    0.000 shape_base.py:234(<listcomp>)
+1728468/5054    1.920    0.000    2.966    0.001 shape_base.py:363(_block_check_depths_match)
+  1728468    0.676    0.000    2.074    0.000 shape_base.py:400(<genexpr>)
+     5054    0.010    0.000   10.561    0.002 shape_base.py:425(_block)
+  1723414    0.265    0.000    0.672    0.000 shape_base.py:433(atleast_nd)
+1728468/5054    0.404    0.000   10.551    0.002 shape_base.py:438(block_recursion)
+     5054    0.382    0.000    1.436    0.000 shape_base.py:442(<listcomp>)
+     5054    0.012    0.000   13.542    0.003 shape_base.py:452(block)
+     5054    0.004    0.000    0.007    0.000 shape_base.py:63(atleast_2d)
+        9    0.000    0.000    0.000    0.000 {built-in method __new__ of type object at 0x2af7a111f180}
+        1    0.000    0.000    0.000    0.000 {built-in method _operator.index}
+    19551    0.005    0.000    0.005    0.000 {built-in method _thread.get_ident}
+       86    0.000    0.000    0.000    0.000 {built-in method builtins.abs}
+    19551    0.012    0.000    0.012    0.000 {built-in method builtins.all}
+        1    0.000    0.000  733.410  733.410 {built-in method builtins.exec}
+  1740502    0.240    0.000    0.240    0.000 {built-in method builtins.getattr}
+  3489163    0.428    0.000    0.428    0.000 {built-in method builtins.id}
+    19578    0.007    0.000    0.007    0.000 {built-in method builtins.isinstance}
+1805427/1805426    0.233    0.000    0.233    0.000 {built-in method builtins.issubclass}
+  4185800    0.251    0.000    0.251    0.000 {built-in method builtins.len}
+    19551    0.027    0.000    0.027    0.000 {built-in method builtins.locals}
+    63707    0.051    0.000    0.092    0.000 {built-in method builtins.max}
+        1    0.000    0.000    0.000    0.000 {built-in method builtins.min}
+     5054    0.003    0.000    0.022    0.000 {built-in method builtins.next}
+       16    0.000    0.000    0.000    0.000 {built-in method builtins.print}
+        6    0.000    0.000    0.000    0.000 {built-in method builtins.round}
+    70756    0.523    0.000    0.523    0.000 {built-in method builtins.sorted}
+       17    0.000    0.000    0.000    0.000 {built-in method from_iterable}
+       73    0.000    0.000    0.000    0.000 {built-in method math.factorial}
+        9    0.000    0.000    0.000    0.000 {built-in method math.gcd}
+        1    0.000    0.000    0.000    0.000 {built-in method numpy.core.multiarray.arange}
+  1878333    1.836    0.000    1.836    0.000 {built-in method numpy.core.multiarray.array}
+     5093   18.015    0.004   18.015    0.004 {built-in method numpy.core.multiarray.concatenate}
+       16    0.000    0.000    0.000    0.000 {built-in method numpy.core.multiarray.copyto}
+   756477  444.911    0.001  444.911    0.001 {built-in method numpy.core.multiarray.dot}
+   117306    0.250    0.000    0.250    0.000 {built-in method numpy.core.multiarray.dragon4_positional}
+       16    0.000    0.000    0.000    0.000 {built-in method numpy.core.multiarray.empty_like}
+        1    0.000    0.000    0.000    0.000 {built-in method numpy.core.multiarray.result_type}
+   118100    0.710    0.000    0.710    0.000 {built-in method numpy.core.multiarray.zeros}
+    76832    0.012    0.000    0.012    0.000 {built-in method numpy.core.umath.geterrobj}
+    38416    0.019    0.000    0.019    0.000 {built-in method numpy.core.umath.seterrobj}
+        2    0.000    0.000    0.000    0.000 {built-in method time.time}
+  1727165   14.482    0.000   14.482    0.000 {method '__deepcopy__' of 'numpy.ndarray' objects}
+        1    0.000    0.000    0.000    0.000 {method '__subclasses__' of 'type' objects}
+        2    0.000    0.000    0.000    0.000 {method '__subclasshook__' of 'object' objects}
+    19555    0.004    0.000    0.004    0.000 {method 'add' of 'set' objects}
+   121230    0.065    0.000    0.416    0.000 {method 'all' of 'numpy.ndarray' objects}
+ 29326300    1.909    0.000    1.909    0.000 {method 'append' of 'list' objects}
+        1    0.000    0.000    0.000    0.000 {method 'astype' of 'numpy.ndarray' objects}
+    19551    0.013    0.000    0.013    0.000 {method 'copy' of 'dict' objects}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+    19551    0.006    0.000    0.006    0.000 {method 'discard' of 'set' objects}
+     3427    0.435    0.000    0.435    0.000 {method 'extend' of 'list' objects}
+  3503843    0.579    0.000    0.579    0.000 {method 'get' of 'dict' objects}
+   870227    0.999    0.000    0.999    0.000 {method 'index' of 'list' objects}
+    19551    0.003    0.000    0.003    0.000 {method 'items' of 'dict' objects}
+    77197    0.011    0.000    0.011    0.000 {method 'keys' of 'dict' objects}
+    38759    0.009    0.000    0.009    0.000 {method 'pop' of 'dict' objects}
+       40    0.000    0.000    0.000    0.000 {method 'ravel' of 'numpy.ndarray' objects}
+   159646    0.441    0.000    0.441    0.000 {method 'reduce' of 'numpy.ufunc' objects}
+        2    0.000    0.000    0.000    0.000 {method 'remove' of 'set' objects}
+     6840    0.013    0.000    0.013    0.000 {method 'reshape' of 'numpy.ndarray' objects}
+    19551    0.005    0.000    0.005    0.000 {method 'rstrip' of 'str' objects}
+    58653    0.022    0.000    0.022    0.000 {method 'split' of 'str' objects}
+     6479    0.002    0.000    0.002    0.000 {method 'transpose' of 'numpy.ndarray' objects}
+    19551    0.005    0.000    0.005    0.000 {method 'update' of 'dict' objects}
+
+
+JobId=54882684 JobName=Thnx_Mike
+   UserId=udianiom(919069) GroupId=cse(2010) MCS_label=N/A
+   Priority=63128 Nice=0 Account=general QOS=udianiom
+   JobState=RUNNING Reason=None Dependency=(null)
+   Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   RunTime=00:12:27 TimeLimit=00:15:00 TimeMin=N/A
+   SubmitTime=2020-02-12T16:11:32 EligibleTime=2020-02-12T16:11:32
+   AccrueTime=2020-02-12T16:11:32
+   StartTime=2020-02-12T16:11:51 EndTime=2020-02-12T16:26:51 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2020-02-12T16:11:51
+   Partition=general-long AllocNode:Sid=dev-intel18:21529
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=lac-425
+   BatchHost=lac-425
+   NumNodes=1 NumCPUs=15 NumTasks=1 CPUs/Task=15 ReqB:S:C:T=0:0:*:*
+   TRES=cpu=15,mem=90G,node=1,billing=14008
+   Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=*
+   MinCPUsNode=15 MinMemoryCPU=6G MinTmpDiskNode=0
+   Features=[intel14|intel16|intel18] DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) Network=(null)
+   Command=/mnt/ufs18/home-098/udianiom/Yani_IMSRG/submitjob4.sb
+   WorkDir=/mnt/ufs18/home-098/udianiom/Yani_IMSRG
+   Comment=stdout=/mnt/ufs18/home-098/udianiom/Yani_IMSRG/slurm-54882684.out 
+   StdErr=/mnt/ufs18/home-098/udianiom/Yani_IMSRG/slurm-54882684.out
+   StdIn=/dev/null
+   StdOut=/mnt/ufs18/home-098/udianiom/Yani_IMSRG/slurm-54882684.out
+   Power=
+
