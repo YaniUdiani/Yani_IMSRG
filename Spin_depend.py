@@ -7,7 +7,11 @@ Created on Wed May  6 17:31:38 2020
 """
 #------------------------------------------------------------------------------
 """ 
-This version is based of Adaption_dev8
+This version is based off Adaptation_Dev13.py. It redefines how I'm constructing
+my basis. From now on, the user inputs the number of particles, and density
+they want in the box. The number of particles must correspond to a magic number.
+N_max now labels the number of new shells I'm adding on top of the magic
+number of hole states the user specifies. 
 """
 #------------------------------------------------------------------------------
 
@@ -23,9 +27,7 @@ import copy
 import time
 #import numba
 #from numba import jit
-import itertools as tools #for infinite matter states
 import cProfile
-from collections import Counter
 #-----------------------------------------------------------------------------------
 # Ploting variables
 #-----------------------------------------------------------------------------------
@@ -40,24 +42,9 @@ bass = []
 bass1 = []
 full = []
 fully = []
-
-countering = []
-countering1 = []
-countering2 = []
-zeros_omega = []
-zeros_H = []
-zeros_eta = []
-temppy = []
-temppy1 = []
-puzzle = []
-hope = []
 #-----------------------------------------------------------------------------------
 # Functions to compute Infinite Matter single particle states
 #-----------------------------------------------------------------------------------
-def powerset(iterable): #Function from itertools to find powerset
-    "powerset([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"
-    s = list(iterable)
-    return tools.chain.from_iterable(tools.combinations(s, r) for r in range(len(s)+1))
 
 # The full_state generator below works by guessing and checking all microstates below the N_Max. 
 # Below the N_Max is determined by <=sqrt(N_Max). Any state with a component of momenta greater than sqrt(N_Max) will be above N_Max.
@@ -99,23 +86,81 @@ def full_state_gen_3D(N_Max, degen): #3D "positive state" generator
                               statey.append([i, j, k, spin, isospin])
     return statey#returns list of acceptable states
 
-#This function takes in "positive states" and returns the "negative states" corresponding to that state. 
-#It also returns the postive state. For example, feeding in [0,1,0.5] will return [0,-1,0.5], [0,-1,-0.5],  [0,1,0.5]  and [0,1,-0.5]
-#This is done to easily include the positive states and their negative equivalents in full_state variable below
-def sign_gen(inputy):
-    array=list(range(0,len(inputy)))
-    results=list(powerset(array))
-    all_sign_permutations=[]
-    all_sign_permutations.append(inputy)
-    for k in  range(1,len(results)):
-        dummy_list=inputy[:]# Copies inputy to dummy_list
-        if 0 not in [inputy[i] for i in results[k]]:#[inputy[i] for i in results[k]]=inputy[results[k]] in R speak
-        ### input arrays with zeros will double count states, this condition takes care of that ####
-            for j in results[k]:
-                dummy_list[j]=-inputy[j]# flip signs
-            all_sign_permutations.append(dummy_list)
-            #print(dummy_list)
-    return all_sign_permutations
+def pre_process(Magic_Numbers):
+  
+  """This func converts the string of magic numbers into a list of #'s"""
+  
+  numeric = []
+  
+  temp = Magic_Numbers.split(",")
+  
+  numeric.append(2)
+  
+  for i in range(1,199): #assume that there are at most 200 shells
+    #I really don't see how I could ever be working with 200 shells
+    
+    numeric.append(int(temp[i]))
+    
+  numeric.append(23506)
+  
+  
+  return numeric
+
+
+def get_N_max_newshells(N_Max, A, degen, Magic_Numbers):
+  
+  """ This function figures out which shells the holes occupy, then uses
+  N_Max to add the shells that will contain the particle states. It also returns
+  
+  Hole_Nmax for the fermi momentum. Note that right now, you can't arbitrarily 
+  pick which states are holes and particles. I'm just going to organize them
+  according to the norm of the momenta. 
+  """
+  
+  if(degen == 2):
+    
+    if(A not in Magic_Numbers and A < max(Magic_Numbers)):
+      
+      
+      print("""The number of particles you entered doesn't form a closed shell.
+            Your number of particles must be one of these values: """, Magic_Numbers)
+      
+      sys.exit()
+      # I'm assuming that I'll never get past A = 23506 = Magic_Numbers[199] (for PNM)
+      #given the way things are going
+      
+    else: 
+      
+      Hole_Nmax = Magic_Numbers.index(A)
+      
+      Total_shells = Hole_Nmax + N_Max
+      
+      return full_state_gen_3D(Total_shells, degen), Hole_Nmax
+    
+    
+  else:
+    
+    Magic_Numbers = [2 * x for x in Magic_Numbers] # protons double # of states
+    
+    
+    if(A not in Magic_Numbers and A < max(Magic_Numbers)):
+      
+      
+      print("""The number of particles you entered doesn't form a closed shell.
+            Your number of particles must be one of these values: """, Magic_Numbers)
+      
+      sys.exit()
+      # I'm assuming that I'll never get past A = 2 * 23506 = Magic_Numbers[199] (for PNM)
+      #given the way things are going
+      
+    else: 
+      
+      Hole_Nmax = Magic_Numbers.index(A)
+      
+      Total_shells = Hole_Nmax + N_Max
+      
+      return full_state_gen_3D(Total_shells, degen), Hole_Nmax
+    
 
 #This function sorts states so that holes come before particles in Full_state. I prefer it this way. 
 def sorter(temp_full_state, Fermi_lvl):
@@ -127,6 +172,7 @@ def sorter(temp_full_state, Fermi_lvl):
         else:
             particles.append(list(i))
     return holes+particles
+  
 
 #The function below generates the particles and hole states that we're used to
 #The function makes my infinite matter generator easily adaptable to my Magnus code
@@ -183,7 +229,7 @@ def construct_basis_2B(full_state,states):
    
     #print(block)
     
-    block = Symmetries_of_Hamiltonian(full_state, block) #do more filtering on block
+   # block = Symmetries_of_Hamiltonian(full_state, block) #do more filtering on block
     #print(block)
     num_blocks=len(block)#get number of blocks
     
@@ -233,6 +279,7 @@ def construct_basis_2B(full_state,states):
     if((len(Bas2B)-len(Bas2B)**(.5))/2!=summ): #ensure that Subset represents upper triangular matrix of pairs
           print("Something is wrong with construct_basis_2B()")
             
+          
     #block.clear() #is this useful in decreasing memory footprint of block? I dunno
     return Bas2B, Subset, block_sizes, subset_sizes, Bas_block2B, mom_to_blk_nums
 
@@ -351,146 +398,10 @@ def ph_filtering(Hole_H, Particle_P, Hole_A):
   
   return HH_PP_Filter, Hole_A_Filter    
 
-#This function is used to speed up the 2B term in the 1B-2B comm
-#For every block, and every term that is added to Output[(i,j), (k,l)]
-#it determines which values of "a" will contribute
-#left_connections corresponds to values of "a" where "a" is on the left most side
-#of the pair : see the commutator eqs. Likewise for right connections 
-#Note: I might change the labeling of "a" to something like "p" in the future
-#to be consistent with chem notation.
-def subset_selector(subset2B):
-    
-  left_connections=[{} for i in range(len(subset2B))]# contains sp states for looping for each blk
-  right_connections=[{} for i in range(len(subset2B))]# contains sp states for looping for each blk
-  
-  for block_num, blocks in enumerate(subset2B):
-    
-    for (i,j) in blocks:
-        
-      if (i,j) not in left_connections[block_num].keys():#create lists in dict
-        left_connections[block_num][(i,j)] = []
-        right_connections[block_num][(i,j)] = []
-        
-      for (k,l) in blocks:
-        if(j == l):
-          left_connections[block_num][(i,j)].append(k)#corresponds to the a in states that is non-zero         
-        if(i == k):
-          right_connections[block_num][(i,j)].append(l)#corresponds to the a in states that is non-zero   
-         
-  return left_connections, right_connections
-
-             
-class OP_Map:#class maps to a given operator allowing calls to that operator's elements. These OPs are of the form [[]]
-#This class is super useful because it allows me to keep a similar indexing structure of a single matrix even though I'm
-#Using a list of block matrices for my operators
-  
-    #Initialize class vars to None. They'll be changed once the vars are known.
-    obj = None #Each instance of OP_Map_B is a list operator, so obj will be 
-    #routinely replaced locally by each instance: each instance will see its operator.
-    idp = None #idp is shared across all instances of OP_Map_B, so it is a fixed
-    #class var: it won't be changed locally or globally
-    #idp_b = None #idp is shared across all instances of OP_Map_B, so it is a fixed
-    #class var: it won't be changed locally or globally
-    def __init__(self, tag):#use operator and idp to define self since those are universally
-        self.tag = tag
-        
-
-    def __getitem__(self, pairs): # Will activate if you do a simple call on OP_Map
-        first = OP_Map.idp[pairs[0]]
-        second = OP_Map.idp[pairs[1]]
-        if( first[0] != second[0] ):#if they aren't in the same block
-            return 0.0
-        else:            
-            return self.obj[first[0]][first[1], second[1]]
-        
-    def __setitem__(self, pairs, val):# Activates when OP_Map()=val
-        first = OP_Map.idp[pairs[0]]
-        second = OP_Map.idp[pairs[1]]
-        if( first[0] == second[0] ):#if they are in the same block
-            self.obj[first[0]][first[1], second[1]] = val
-            
-    def __add__(self, pairs, val):# Activates when OP_Map()+=val
-        first = OP_Map.idp[pairs[0]]
-        second = OP_Map.idp[pairs[1]]
-        if( first[0] == second[0] ):#if they are  in the same block
-            self.obj[first[0]][first[1], second[1]] += val
-        
-    def __sub__(self, pairs, val):# Activates when OP_Map()-=val
-        first = OP_Map.idp[pairs[0]]
-        second = OP_Map.idp[pairs[1]]
-        if( first[0] == second[0] ):#if they are in the same block
-            self.obj[first[0]][first[1], second[1]] -= val   
-   
-class OP_Map_B:# Does same thing as OP_Map, but if the blk_num of both 
-  #pairs is known, then it will search that block for their indices
-  
-  #Initialize class vars to None. They'll be changed once the vars are known.
-  obj = None #Each instance of OP_Map_B is a list operator, so obj will be 
-  #routinely replaced locally by each instance: each instance will see its operator.
-  idp_b = None #idp_b is shared across all instances of OP_Map_B, so it is a fixed
-  #class var: it won't be changed locally or globally
-  
-  def __init__(self, tag):
-    self.tag = tag #dummy var: instance referenced through tag
-    
-  def __getitem__(self, pairs): # Will activate if you do a simple call on OP_Map_B
-    #print(self.obj) 
-    return self.obj[pairs[2]][OP_Map_B.idp_b[pairs[2]][pairs[0]], OP_Map_B.idp_b[pairs[2]][pairs[1]]]
-        
-  def __setitem__(self, pairs, val):# Activates when OP_Map_B()=val
-    self.obj[pairs[2]][OP_Map_B.idp_b[pairs[2]][pairs[0]], OP_Map_B.idp_b[pairs[2]][pairs[1]]] = val
-              
-  def __add__(self, pairs, val):# Activates when OP_Map_B()+=val
-    self.obj[pairs[2]][OP_Map_B.idp_b[pairs[2]][pairs[0]], OP_Map_B.idp_b[pairs[2]][pairs[1]]] += val
-    
-  def __sub__(self, pairs, val):# Activates when OP_Map_B()-=val
-    self.obj[pairs[2]][OP_Map_B.idp_b[pairs[2]][pairs[0]], OP_Map_B.idp_b[pairs[2]][pairs[1]]] -= val
-      
-#Quick test to ensure that generic OP_Map does what it needs to do            
-def OP_Map_Test(bas2B, block_sizes, bas_block2B, idp , H2B):
-    
-    H2B_Test = copy.deepcopy(H2B)
-    block_num = block_sizes.index(min(block_sizes))#pick first smallest block
-    block = bas_block2B[block_num]
-    
-    H2B_Test_Map = OP_Map("H2B_Test_Map")
-    H2B_Test_Map.obj = H2B_Test
-    
-    #block=random.choice(bas_block2B)#pick random block (need to import random to work)
-    #block_num=bas_block2B.index(block)
-    for bra in block:
-        for ket in block:           
-            prev=H2B_Test[block_num][block.index(bra),block.index(ket)]
-            
-            ######## Can it call the appropriate matrix elements? ##########
-            if(prev != H2B_Test_Map[[ bra, ket ]]):
-                print("OP_Map fails at calling H2B(bra,ket) :",bra,ket,block_num)
-                sys.exit()
-            
-            ######## Can it add/sub to matrix elements? ##########
-            H2B_Test_Map[[ bra, ket ]]+=2 
-            if(H2B_Test[block_num][block.index(bra),block.index(ket)] != prev + 2):
-                print("OP_Map fails at adding to H2B(bra,ket) :",bra,ket,block_num)
-                sys.exit()
-
-                
-            ######## Can it replace matrix elements? ##########
-            H2B_Test_Map[[ bra, ket ]]=4            
-            if(H2B_Test[block_num][block.index(bra),block.index(ket)] != 4):
-                print("OP_Map fails at replacing H2B(bra,ket) :",bra,ket,block_num)
-                sys.exit()
-
-    return "Yaaay! OP_Map works as expected :-]"
     
 #
 # We use dictionaries for the reverse lookup of state indices
 #
-def construct_index_2B(bas2B):
-  index = { }
-  for i, state in enumerate(bas2B):
-    index[state] = i
-
-  return index
 
 #The next function below does the same thing as idx2B, but stores the indices of pairs in a given block
 #Figures out which block in which a given pair (p,q) lies. It also returns the index location of that 
@@ -555,40 +466,6 @@ def extra_symm_of_Ham(a, b):
   #will be split into
   
 
-def pair_acceptor(a, b, c, d):
-  
-  """ph mat elements of form (a,a)(b,b) will be zeroed out by occ_matrix.
-  These pairs (a,a) will have k_a-k_a=[0. 0. 0.]
-  Moreover, (a,a) won't connect with any other pairs except (b,b).
-  Moreover, some pairs of the form (a,a+1) or (a+1,a) will have like (0,1) or (2,3) or (1,0) or (3,2)
-  k_{a}-k_{a+1}=[0. 0. 0.] since they will spin up, spin down pairs with same k = k_a
-  The pairs (a,a) and (a,a+1) will be the only pairs that form the k_{a}-k_{b}=[0. 0. 0.]
-  block. Stare at full_state to clearly see this. 
-  Please note that a pair like (8,7) or (7,8) won't fall into this category."""
-  
-  """I'm keeping this here, so I can later analyze its 
-  #Performance with Cprofile. Am I really better checking all these conditions
-  #for every pair verus just computing the zero block with smaller number of
-  #conditionals (see Dev4), then throwing it out?"""
-  
-  if (a%2 + d%2 == c%2 + b%2 and d!=a!=b!=c ): #first: conserve total spin projections
-    #The a!=b piece is to avoid pairs of the form (a,a). d!=a is manually coding in
-    #exlusion principle, likewise for b!=c
-    
-    if (abs(a-b) == 1 and (1 - (a+b))%4 == 0): #Then you have an element in the special set
-        #i.e., you're considering something in the [0,0,0] block. I don't want this blk
-        #so return False. If I had another pair with abs(a-b) == 1 in another block
-        #it would return True. Note that in the [0,0,0]  blk, if abs(a-b) == 1, then
-        #abs(c-d) == 1 since I'm excluding the (a=b) and (c=d) terms. 
-        #Note if (a=b), then (c=d) if spin projections are preserved. 
-        
-        return False
-      
-    else:
-      
-      return True
-             
-  return False
 
 def obtain_blocks(ph_blocks, dim1B, dim2B, fermi_index):
   
@@ -600,7 +477,8 @@ def obtain_blocks(ph_blocks, dim1B, dim2B, fermi_index):
   stats1 = 0 #total size of ph blocks that will be compared to size of 2B matrix 
   #in the naive case
   
-  del ph_blocks['[0. 0. 0.]-1'] #remove '[0. 0. 0.]-1' block since it won't have an ph terms
+  #del ph_blocks['[0. 0. 0.]-1'] #remove '[0. 0. 0.]-1' block since it won't have an ph terms
+  del ph_blocks['[0. 0. 0.]'] #remove '[0. 0. 0.]-1' block since it won't have an ph terms
   #since '[0. 0. 0.]' block will look like (0,1)(2,3)(4,5)... it will have signature = -1
   
   for blockheads in ph_blocks:
@@ -629,7 +507,9 @@ def obtain_blocks(ph_blocks, dim1B, dim2B, fermi_index):
     
     if(ph_arrangement):#there has to be at least one ph term for block not to be zeroed out
       #if there are no ph terms in a block, then I don't want to store it 
-      basph_blocks2B.append(ph_arrangement + temp)
+      #basph_blocks2B.append(ph_arrangement + temp)
+      
+      basph_blocks2B.append([ph_arrangement,temp])#p-p and h-h sector will be at basph_blocks2B[1]
       
       stats1 += 2*len(blockys)**2 #multiply be 2 for mirrored blks not included
       
@@ -694,16 +574,17 @@ def ph_block_constructor(subset2B, full_state, fermi_index, dim2B, dim1B):
     
     for (i,j) in subset_list:
         
-      sign = extra_symm_of_Ham(i,j) # group (i,j) so that it will only connect with similar spin pairs
+      #sign = extra_symm_of_Ham(i,j) # group (i,j) so that it will only connect with similar spin pairs
       
       rel_mom = full_state[i][0:3] - full_state[j][0:3]
       
         
-      blk = str(rel_mom) + str(sign) #relative momentum blk partitioned into smaller blks
+      #blk = str(rel_mom) + str(sign) #relative momentum blk partitioned into smaller blks
+      blk = str(rel_mom) #relative momentum blk partitioned into smaller blks
       #with similar spins. See extra_symm_of_Ham(i,j) description.
       
-      flip = str(full_state[j][0:3] - full_state[i][0:3]) + str(-sign)
-           
+      #flip = str(full_state[j][0:3] - full_state[i][0:3]) + str(-sign)
+      flip = str(full_state[j][0:3] - full_state[i][0:3])     
             
       if blk not in simple_ph_blocks and flip not in simple_ph_blocks:
         
@@ -734,9 +615,9 @@ def test_on_ph_refs(basph_blocks2B, full_state):
     
     for block_num2 in Hermitian:
                  
-      for (i,j) in basph_blocks2B[block_num1]:
+      for (i,j) in basph_blocks2B[block_num1][1]:
         
-        for (k,l) in basph_blocks2B[block_num2]:
+        for (k,l) in basph_blocks2B[block_num2][1]:
           
           if( np.all ( full_state[i][0:3]+full_state[l][0:3] == full_state[k][0:3]+full_state[j][0:3])):
             
@@ -769,9 +650,10 @@ def special_index_ph(basph_block2B):#this is only for the ph transformation
       index_blocked[block_num][pair] = ind
       
   return index_blocked
+
       
  # diagonal matrix: n_a - n_b
-def construct_occupationA_2B(basph_block2B, occ1B):
+def construct_occupationA_2B(basph_block2B, occ1B, DTYPE):
   
   """ diagonal matrix: n_a - n_b 
   returns the occupation matrix only for the "reference pairs"
@@ -786,16 +668,17 @@ def construct_occupationA_2B(basph_block2B, occ1B):
   Update: It turns out that those mirrored pairs are for computing 
   hermitian conjugate terms for resulting block operators. Since I know what
   those should be, I don't even need to explicity compute anything with the 
-  mirrored terms. 
+  mirrored terms. Also, I will only be computing the matrix for the ph sector
+  in each block to further simplify my calculations.
   """
   
   occ=[]#initialize list of block matrices for ph trans
 
   for blocks in basph_block2B:# go through blocks
     
-    temp_occ_ref = np.zeros((len(blocks), len(blocks)))
+    temp_occ_ref = np.zeros((len(blocks[0]), len(blocks[0])), dtype = DTYPE)
       
-    for i1, (i,j) in enumerate(blocks):
+    for i1, (i,j) in enumerate(blocks[0]):#just get elements for ph sector
       
       temp_occ_ref[i1, i1] = occ1B[i] - occ1B[j]
       
@@ -803,53 +686,173 @@ def construct_occupationA_2B(basph_block2B, occ1B):
 
   return occ
 
-def ph_trans_then_mult(x, y, resultant, ph_block, block_occph, idp, sign):
+
+def ph_trans_then_mult(x, y, resultant, ph_block, block_occph, idp, sign, DTYPE):
   
-  """ See description in ph_trans_prep() """
+  """ See description in ph_trans_prep()
+  Note that ph_block[0] = ph/hp sector and ph_block[1] = pp + hh = E (everything else sector)
+  """
   
   #Perform PH Transform 
   
-  x_ph = np.zeros((len(ph_block), len(ph_block)))  
-  y_ph = np.zeros((len(ph_block), len(ph_block)))
+  x_ph_ph = np.zeros((len(ph_block[0]), len(ph_block[0])), dtype = DTYPE)  
+  y_ph_ph = np.zeros((len(ph_block[0]), len(ph_block[0])), dtype = DTYPE)
+  
+  x_E_ph = np.zeros((len(ph_block[1]), len(ph_block[0])), dtype = DTYPE) 
+  y_ph_E = np.zeros((len(ph_block[0]), len(ph_block[1])), dtype = DTYPE)
   
   
-  for i1, (a,b) in enumerate(ph_block):
+  
+  for i1, (a,b) in enumerate(ph_block[0]):
     
-    for i2, (c,d) in enumerate(ph_block):
+    for i2, (c,d) in enumerate(ph_block[0]): #obtain x_ph_ph and y_ph_ph
       
       block_num, index_1 = idp[(a,d)]
       
       index_2 = idp[(c,b)][1]
       
-      x_ph[ i1, i2 ] -= x[block_num][index_1, index_2]
+      x_ph_ph[ i1, i2 ] -= x[block_num][index_1, index_2]
       
-      y_ph[ i1, i2 ] -= y[block_num][index_1, index_2]
+      y_ph_ph[ i1, i2 ] -= y[block_num][index_1, index_2]      
+      
+      #x_ph_ph[ i1, i2 ] -= x_map[[(a,d), (c,b)]]
+      
+      #y_ph_ph[ i1, i2 ] -= y_map[[(a,d), (c,b)]]
       
       
-  prod = dot(x_ph, dot(block_occph, y_ph))#do mult that you've waited all ur life to do 
-  
-  #Inverse Transform 
-  
-  for i1, (a,b) in enumerate(ph_block):
+      
+  for i1, (a,b) in enumerate(ph_block[1]):
     
-    for i2, (c,d) in enumerate(ph_block):
+    for i2, (c,d) in enumerate(ph_block[0]): #obtain x_E_ph
+      
+      block_num, index_1 = idp[(a,d)]
+      
+      #index_2 = idp[(c,b)][1]
+      
+      x_E_ph[ i1, i2 ] -= x[block_num][index_1, idp[(c,b)][1]]
+          
+      
+      #x_E_ph[ i1, i2 ] -= x_map[[(a,d), (c,b)]]
+      
+      
+
+  for i1, (a,b) in enumerate(ph_block[0]):
+    
+    for i2, (c,d) in enumerate(ph_block[1]): #obtain y_ph_E
+      
+      block_num, index_1 = idp[(a,d)]
+      
+      #index_2 = idp[(c,b)][1]
+      
+      y_ph_E[ i1, i2 ] -= y[block_num][index_1, idp[(c,b)][1]]      
+      
+      #y_ph_E[ i1, i2 ] -= y_map[[(a,d), (c,b)]]      
+      
+ 
+ ###### Perform multiplications, then immediately inverse transform, 
+ #so resulting prod matrix is cleared from memory
+ 
+ ##################### ph-ph block mult & inverse ##################### 
+     
+  # multiply in ph-ph block of resulting prod matrix    
+  prod_ph_ph = dot(x_ph_ph, dot(block_occph, y_ph_ph))
+  
+  #Inverse Transform ph-ph block of prod matrix
+  
+  for i1, (a,b) in enumerate(ph_block[0]): 
+    
+    for i2, (c,d) in enumerate(ph_block[0]):
+      
+      block_num, index_1 = idp[(a,d)];    
+      
+      resultant[block_num][index_1, idp[(c,b)][1]] -= prod_ph_ph[ i1, i2 ]
+      
+      resultant[block_num][idp[(b,c)][1], idp[(d,a)][1]] = sign * -prod_ph_ph[ i1, i2 ] #conjugate term       
+      
+      #resultant_map[[(a,d), (c,b)]] -= prod_ph_ph[ i1, i2 ]
+      
+      #resultant_map[[(b,c), (d,a)]] = sign * -prod_ph_ph[ i1, i2 ]#conjugate term 
+      
+      # mirror contribute to hermitian conjugate of resultant_map
+  
+  ##################### ph-E block mult & inverse ##################### 
+   
+  # multiply in ph-E block  of resulting prod matrix
+  prod_ph_E = dot(x_ph_ph, dot(block_occph, y_ph_E))# multiply in ph-E sector
+  
+  
+    #Inverse Transform ph-ph block of prod matrix
+  
+  for i1, (a,b) in enumerate(ph_block[0]): 
+    
+    for i2, (c,d) in enumerate(ph_block[1]):
       
       block_num, index_1 = idp[(a,d)]; 
       
-      #index_4 = idp[(d,a)][1]
-            
-      #index_3 = idp[(b,c)][1]; index_2 = idp[(c,b)][1]
+      resultant[block_num][index_1, idp[(c,b)][1]] -= prod_ph_E[ i1, i2 ]
       
+      resultant[block_num][idp[(b,c)][1], idp[(d,a)][1]] = sign * -prod_ph_E[ i1, i2 ] #conjugate term       
       
-      resultant[block_num][index_1, idp[(c,b)][1]] -= prod[ i1, i2 ]
+      # mirror contribute to hermitian conjugate of resultant
       
-      resultant[block_num][idp[(b,c)][1], idp[(d,a)][1]] = sign * -prod[ i1, i2 ] #conjugate term 
+      #resultant_map[[(a,d), (c,b)]] -= prod_ph_E[ i1, i2 ]
+      
+      #resultant_map[[(b,c), (d,a)]] = sign * -prod_ph_E[ i1, i2 ] #conjugate term 
+      
       
       # mirror contribute to hermitian conjugate of resultant_map
       
-  return
+
+  ##################### E-ph block mult & inverse ##################### 
+   
+  # multiply in ph-E block  of resulting prod matrix
+  prod_E_ph = dot(x_E_ph, dot(block_occph, y_ph_ph))# multiply in ph-E sector
+  
+  
+    #Inverse Transform ph-ph block of prod matrix
+  
+  for i1, (a,b) in enumerate(ph_block[1]): 
+    
+    for i2, (c,d) in enumerate(ph_block[0]):
+            
+      block_num, index_1 = idp[(a,d)]; 
       
-def ph_trans_prep(x, y, basph_block2B, occphA_2B, bs_len, sign, idp, block_sizes):
+      resultant[block_num][index_1, idp[(c,b)][1]] -= prod_E_ph[ i1, i2 ]
+      
+      resultant[block_num][idp[(b,c)][1], idp[(d,a)][1]] = sign * -prod_E_ph[ i1, i2 ] #conjugate term       
+      
+#      resultant_map[[(a,d), (c,b)]] -= prod_E_ph[ i1, i2 ]
+#      
+#      resultant_map[[(b,c), (d,a)]] = sign * -prod_E_ph[ i1, i2 ] #conjugate term 
+      
+      
+      # mirror contribute to hermitian conjugate of resultant_map
+      
+      
+##################### ph-ph block mult & inverse ##################### 
+      
+  # multiply in E-E block of resulting prod matrix
+  prod_E_E = dot(x_E_ph, dot(block_occph, y_ph_E))# multiply in ph-ph sector
+  
+  
+  for i1, (a,b) in enumerate(ph_block[1]): 
+    
+    for i2, (c,d) in enumerate(ph_block[1]):
+      
+      block_num, index_1 = idp[(a,d)]; 
+      
+      resultant[block_num][index_1, idp[(c,b)][1]] -= prod_E_E[ i1, i2 ]
+      
+      resultant[block_num][idp[(b,c)][1], idp[(d,a)][1]] = sign * -prod_E_E[ i1, i2 ] #conjugate term       
+      
+      #resultant_map[[(a,d), (c,b)]] -= prod_E_E[ i1, i2 ]
+      
+     #resultant_map[[(b,c), (d,a)]] = sign * -prod_E_E[ i1, i2 ] #conjugate term   
+  
+      
+  return      
+
+def ph_trans_prep(x, y, basph_block2B, occphA_2B, bs_len, sign, idp, block_sizes, DTYPE):
   
   """ Takes in block operators x, y and preps them for conversion to ph representation. 
   Since both operators will have the same block structure in ph representation,
@@ -862,39 +865,19 @@ def ph_trans_prep(x, y, basph_block2B, occphA_2B, bs_len, sign, idp, block_sizes
   block matrix.
   
   """
-  resultant = [np.zeros( (block_sizes[i], block_sizes[i]) ) for i in bs_len]#initialize list of block matrices
+  resultant = [np.zeros( (block_sizes[i], block_sizes[i]), dtype = DTYPE ) for i in bs_len]#initialize list of block matrices
   
   #resultant_map = OP_Map("R")
   #resultant_map.obj = resultant
   
   for ph_block_num, ph_block in enumerate(basph_block2B):
     
-    ph_trans_then_mult(x, y, resultant, ph_block, occphA_2B[ph_block_num], idp, sign)
+    ph_trans_then_mult(x, y, resultant, ph_block, occphA_2B[ph_block_num], idp, sign, DTYPE)
     
   return resultant
 
-def basic_checks(resultant, sign):
-  
-  if(sign == 1):
 
-    for blocks in resultant:
-      
-      if(LA.norm( blocks - transpose(blocks)  ) != 0):
-        
-        print("Result is not hermitian")
-        
-  else:
-    
-    print(resultant[len(resultant)-23])
-    
-    #for blocks in resultant:
-      #print(blocks)
-      #if(LA.norm( blocks + transpose(blocks)  ) != 0):
-        
-        #print("Result is not anti-hermitian")
-        #print( blocks + transpose(blocks)  )
-    #print(blocks)
-    #sys.exit()
+
         
 def self_energy( Gamma,f, E, user_data ):
     
@@ -948,6 +931,7 @@ def commutator(a,b):
 #-----------------------------------------------------------------------------------
 # norms of off-diagonal Hamiltonian pieces and also, norm of 2-BD Lists
 #-----------------------------------------------------------------------------------
+  
 def calc_fod_norm(f, user_data):
   particles = user_data["particles"]
   holes     = user_data["holes"]
@@ -958,6 +942,7 @@ def calc_fod_norm(f, user_data):
       norm += f[a,i]**2 + f[i,a]**2
 
   return np.sqrt(norm)
+
 
 def calc_Gammaod_norm(Gamma, user_data):
     
@@ -1013,11 +998,12 @@ def calc_full2B_norm(Gamma, subset2B,bs_len,idp_b):#compare timing with other ca
   norm = 0.0
   
   for block_num in bs_len:# go through blocks
-      #find pairs in block      
-      for i1, bra in enumerate(subset2B[block_num]):    
-        for i2, ket in enumerate(subset2B[block_num]):
-          
-            norm += 4 * Gamma[block_num][ i1, i2]**2  
+    #find pairs in block     
+    norm  += LA.norm(Gamma[block_num])**2
+#    for i1, bra in enumerate(subset2B[block_num]):    
+#      for i2, ket in enumerate(subset2B[block_num]):
+#        
+#          norm += 4 * Gamma[block_num][ i1, i2]**2  
 
   return np.sqrt(norm)
 #-----------------------------------------------------------------------------------
@@ -1046,9 +1032,9 @@ def List_operation(A, B, block_sizes,sign,operation, bs_len): #performs simple o
 #-----------------------------------------------------------------------------------
 # occupation number matrices
 #-----------------------------------------------------------------------------------
-def construct_occupation_1B(dim1B, holes, particles):
+def construct_occupation_1B(dim1B, holes, particles, DTYPE):
 
-  occ = np.zeros(dim1B)
+  occ = np.zeros(dim1B, DTYPE)
 
   for i in holes:
     occ[i] = 1.
@@ -1056,8 +1042,9 @@ def construct_occupation_1B(dim1B, holes, particles):
   return occ
 
 # diagonal matrix: 1 - n_a - n_b
-def construct_occupationB_2B(block_sizes, bas_block2B, occ1B, bs_len):
-  occ=[np.zeros((block_sizes[i],block_sizes[i])) for i in bs_len]#initialize list of block matrices
+def construct_occupationB_2B(block_sizes, bas_block2B, occ1B, bs_len, DTYPE):
+  
+  occ=[np.zeros((block_sizes[i],block_sizes[i]), DTYPE) for i in bs_len]#initialize list of block matrices
 
   for block_num in bs_len:# go through blocks
     for i1, (i,j) in enumerate(bas_block2B[block_num]):
@@ -1066,8 +1053,9 @@ def construct_occupationB_2B(block_sizes, bas_block2B, occ1B, bs_len):
   return occ
 
 # diagonal matrix: n_a * n_b 
-def construct_occupationC_2B(block_sizes, bas_block2B, occ1B, bs_len):
-  occ=[np.zeros((block_sizes[i],block_sizes[i])) for i in bs_len]#initialize list of block matrices
+def construct_occupationC_2B(block_sizes, bas_block2B, occ1B, bs_len, DTYPE):
+  
+  occ=[np.zeros((block_sizes[i],block_sizes[i]), DTYPE) for i in bs_len]#initialize list of block matrices
 
   for block_num in bs_len:# go through blocks
     for i1, (i,j) in enumerate(bas_block2B[block_num]):
@@ -1094,7 +1082,7 @@ def eta_white(f, Gamma, user_data):
   Hole_H = user_data["Hole_H"]
   
   HH_PP_Filter = user_data["HH_PP_Filter"] 
-  
+  DTYPE = user_data["DTYPE"]
   # one-body part of the generator
 #  eta1B  = np.zeros_like(f)
 #  
@@ -1106,16 +1094,20 @@ def eta_white(f, Gamma, user_data):
 #      eta1B[i, a] = -val 
 
   # two-body part of the generator
-  eta2B = [np.zeros((block_sizes[i],block_sizes[i])) for i in bs_len]#initialize list of block matrices
+  eta2B = [np.zeros((block_sizes[i],block_sizes[i]), dtype = DTYPE) for i in bs_len]#initialize list of block matrices
   
 
   for block_num in HH_PP_Filter:# go through blocks
     
     disp = subset_size[block_num]# how far away to the right is (b,a) from (a,b)? same for (i,j)
+    
     for (a,b) in Particle_P[block_num]:
+      
+      i1 = idp_b[block_num][(a,b)]#locaion of pair (a,b)
+      
       for (i,j) in Hole_H[block_num]:
         
-        i1 = idp_b[block_num][(a,b)]#locaion of pair (a,b)
+        
         i2 = idp_b[block_num][(i,j)]#location of pair (i,j)
         
         block_num1, index1 = idp[(a,i)]
@@ -1127,7 +1119,7 @@ def eta_white(f, Gamma, user_data):
 #            print([(a,i),(b,j), block_num1])
         
         denom = ( 
-        f[a,a] + f[b,b] - f[i,i] - f[j,j]  
+        f[a] + f[b] - f[i] - f[j]  
         
         + Gamma[block_num][i1, i1]
         + Gamma[block_num][i2, i2]
@@ -1188,7 +1180,9 @@ def special_commutator(x, y, user_data,sign): # takes in either 1 or 2 body matr
 #Since this commuatator is used for both the Hamiltonian calcuation with terms that look like ~[H,Omega] (hermitian with anti-hermitian)
 #and Magnus expansion with terms that look like ~[Omega, eta] (anti-hermitian with anti-hermitian), the definition of xy in the 2B-2B
 #commutator must be such that ~[H,Omega] returns a hermitian matrix; and ~[Omega, eta] returns an anti-hermitian matrix
-                   
+    
+    DTYPE = user_data["DTYPE"]
+               
     if(type(x) == list and type(y) == list):# 2B-2B
           
       
@@ -1197,7 +1191,7 @@ def special_commutator(x, y, user_data,sign): # takes in either 1 or 2 body matr
         occB_2B   = user_data["occB_2B"]
         occC_2B   = user_data["occC_2B"]
         occphA_2B = user_data["occphA_2B"]
-        
+
         subset_size = user_data["subset_sizes"]
         block_sizes = user_data["block_sizes"]
         bs_len = user_data["bs_len"]
@@ -1219,7 +1213,7 @@ def special_commutator(x, y, user_data,sign): # takes in either 1 or 2 body matr
 #        x_map_o.obj = x #set appropriate x object 
 #        y_map_o.obj = y #set appropriate y object
 
-        xyi = ph_trans_prep(x, y, basph_block2B, occphA_2B, bs_len, sign, idp, block_sizes)
+        xyi = ph_trans_prep(x, y, basph_block2B, occphA_2B, bs_len, sign, idp, block_sizes, DTYPE)
         Output_2B = List_operation(bracket, 0.5, block_sizes,sign,"Scalar_Mul", bs_len)
         
         if(sign == 1): #if commutator coming from Hamiltonian routine
@@ -1229,7 +1223,7 @@ def special_commutator(x, y, user_data,sign): # takes in either 1 or 2 body matr
             
             #Initializations 
             Output_0B = 0.0
-            Output_1B = np.zeros((dim1B, dim1B))
+            Output_1B = np.zeros((dim1B, ))
             
             Particle_P = user_data["Particle_P"]
             Hole_H = user_data["Hole_H"]           
@@ -1260,7 +1254,7 @@ def special_commutator(x, y, user_data,sign): # takes in either 1 or 2 body matr
                     
                     i1 =  idp_b[block_num][(i,p)]
                     
-                    Output_1B[p, p] += xy[block_num][i1, i1] 
+                    Output_1B[p] += xy[block_num][i1, i1] 
                 
 #                for (r,p) in subset2B[block_num]:
 #                  
@@ -1275,15 +1269,18 @@ def special_commutator(x, y, user_data,sign): # takes in either 1 or 2 body matr
                 
                 Hermitian = copy.copy(subset2B[block_num]) 
                 
+                #ranger = range(len(Hermitian))
+                
                 for i1, (r,p) in reverse_enumerate(Hermitian,disp):
                   
                     index = idp_b[block_num][(r,p)]#locaion of pair (r,p)
                   
-                    Output_1B[p, p] +=  xyz[block_num][index, index]
+                    Output_1B[p] +=  xyz[block_num][index, index]
                     
-                    Output_1B[r, r] +=  xyz[block_num][index + disp, index + disp]
+                    Output_1B[r] +=  xyz[block_num][index + disp, index + disp]
                     
                     for i2, (j,q) in enumerate(Hermitian):
+                    #for i2 in ranger:  
     
                             
                         Output_2B[block_num][i1, i2]-=( 
@@ -1317,7 +1314,10 @@ def special_commutator(x, y, user_data,sign): # takes in either 1 or 2 body matr
                 
                 for i1, (r,p) in reverse_enumerate(Hermitian,disp):
                     for i2, (j,q) in enumerate(Hermitian):
-    
+                #ranger = range(len(Hermitian))
+                #for i1 in reversed(ranger):
+                  #  for i2 in ranger:
+                      
                         Output_2B[block_num][i1, i2]-=( 
                                 xyi[block_num][i1, i2]
                                 - xyi[block_num][i1 + disp, i2]
@@ -1351,7 +1351,7 @@ def special_commutator(x, y, user_data,sign): # takes in either 1 or 2 body matr
         subset2B = user_data["subset2B"]
         
         
-        Output_2B=[np.zeros((block_sizes[i],block_sizes[i])) for i in bs_len]#initialize list of block matrices
+        Output_2B=[np.zeros((block_sizes[i],block_sizes[i]), DTYPE) for i in bs_len]#initialize list of block matrices
         
                     
         for block_num in bs_len:# go through blocks  
@@ -1363,11 +1363,11 @@ def special_commutator(x, y, user_data,sign): # takes in either 1 or 2 body matr
                 for i2, (k,l) in enumerate(Hermitian):                  
                     
                     
-                    mval = -y[l,l] * x[block_num][i1, i2 + disp] #I hope this is stored in cache
+                    mval = -y[l] * x[block_num][i1, i2 + disp] #I hope this is stored in cache
                     
-                    mval += (y[k,k] - y[i,i]) * x[block_num][i1, i2]
+                    mval += (y[k] - y[i]) * x[block_num][i1, i2]
                     
-                    mval += y[j,j] * x[block_num][i1 + disp, i2]
+                    mval += y[j] * x[block_num][i1 + disp, i2]
                     
                     #mval -= y[i,i] * x[block_num][i1, i2]
                                       
@@ -1395,10 +1395,11 @@ def RHS_Cal(Omega_2B,Eta_2B, user_data):# Generates right hand side of flow equa
     bs_len = user_data["bs_len"]
     #idp = user_data["idp"]
     idp_b    = user_data["idp_b"]
+    DTYPE = user_data["DTYPE"]
     
     #RHS_0B=0. #Initialize RHS
     #RHS_1B=np.zeros_like(Omega_1B)
-    RHS_2B=[np.zeros((block_sizes[i],block_sizes[i])) for i in bs_len]#initialize list of block matrices
+    RHS_2B=[np.zeros((block_sizes[i],block_sizes[i]), DTYPE) for i in bs_len]#initialize list of block matrices
 
     for n in range(len(bn2)):
         if n==0: 
@@ -1429,7 +1430,7 @@ def RHS_Cal(Omega_2B,Eta_2B, user_data):# Generates right hand side of flow equa
         
         shiftymatrix_2B=List_operation(nth_2B, 1/np.math.factorial(n), block_sizes,"NA","Scalar_Mul", bs_len)
         
-        if (calc_full2B_norm(shiftymatrix_2B, subset2B,bs_len,idp_b) < 1e-8 ):
+        if (calc_full2B_norm(shiftymatrix_2B, subset2B,bs_len,idp_b) < 1e-5 ):
             break        
         #RHS_1B+=bn2[n]*shiftymatrix_1B
         
@@ -1447,12 +1448,13 @@ def Transformed_Ham(Omega_2B, user_data):# Generates new Hamiltonian by performi
     f=user_data["f"]
     Gamma=user_data["Gamma"]
     bs_len = user_data["bs_len"]
+    DTYPE = user_data["DTYPE"]
     #idp = user_data["idp"]
     #idp_b    = user_data["idp_b"]
     
-    H_0B=0. #Initialize Hamilitonian
-    H_1B=np.zeros_like(f)
-    H_2B=[np.zeros((block_sizes[i],block_sizes[i])) for i in bs_len]#initialize list of block matrices
+    H_0B = 0. #Initialize Hamilitonian
+    H_1B = np.zeros_like(f)
+    H_2B = [np.zeros((block_sizes[i],block_sizes[i]), DTYPE) for i in bs_len]#initialize list of block matrices
 
     for n in range(len(bn2)):
         if n==0: 
@@ -1480,9 +1482,10 @@ def Transformed_Ham(Omega_2B, user_data):# Generates new Hamiltonian by performi
         
         shiftymatrix_2B=List_operation(nth_2B, 1/np.math.factorial(n), block_sizes,"NA","Scalar_Mul", bs_len)
         #if ((LA.norm(shiftymatrix_1B)+ calc_full2B_norm(shiftymatrix_2B, subset2B,bs_len,idp_b)) < 1e-10 ):
-        if (abs(shiftymatrix_0B) < 1e-8 ):#MeV
+        if (abs(shiftymatrix_0B) < 1e-4 ):#MeV
             #print(n)
-            break        
+            break    
+          
         H_0B+=shiftymatrix_0B
         H_1B+=shiftymatrix_1B
         
@@ -1518,7 +1521,7 @@ def List_reshape(dOmega_2B,block_sizes, bs_len): #flatten 2B list into one array
         
     return np.array(Output)
 
-def derivative_wrapper(y, user_data, Transformed_Hamiltonian, flow_p):
+def derivative_wrapper(y, user_data, Transformed_Hamiltonian):
 
   dim1B = user_data["dim1B"]
   #dim2B = dim1B*dim1B
@@ -1535,7 +1538,7 @@ def derivative_wrapper(y, user_data, Transformed_Hamiltonian, flow_p):
 
   # calculate the 2BD generator
   Eta_2B = calc_eta(Transformed_Hamiltonian[1], Transformed_Hamiltonian[2], user_data)
-  worm(Eta_2B, bs_len, flow_p, countering)
+  
   # share data
   #user_data["dE"] = dOmega_0B #storing dOmega_0B/ds in dE
   user_data["eta_norm"] =  calc_full2B_norm(Eta_2B, subset2B,bs_len,idp_b)  
@@ -1607,7 +1610,15 @@ def H2B_element(p,q,r,s,full_state,Combined_consts, k_alpha,degen,L):
     
     return Element #matrix element with no definite symmetry
     
-
+def simple_H2B_element(p,q,r,s,full_state,Combined_consts, k_alpha,degen,L):
+  
+  "Gets rid of spin dependence to understand whether zero blocks of omega dependent on spin"
+  
+  Element =  radial_element(p,q,r,s,full_state,Combined_consts,k_alpha,0,L)
+  Element += radial_element(p,q,r,s,full_state,Combined_consts,k_alpha,1,L)
+  Element += radial_element(p,q,r,s,full_state,Combined_consts,k_alpha,2,L)
+  
+  return Element/10
     
 def Inf_Matter_Ham(full_state, energy_const, Combined_consts, k_alpha, degen, L, user_data):
     
@@ -1615,35 +1626,58 @@ def Inf_Matter_Ham(full_state, energy_const, Combined_consts, k_alpha, degen, L,
     #bas2B = user_data["bas2B"]
     subset2B = user_data["subset2B"]
     block_sizes = user_data["block_sizes"]
-    bas_block2B = user_data["bas_block2B"]
+    #bas_block2B = user_data["bas_block2B"]
     bs_len = user_data["bs_len"]
-
-    H1B=np.zeros((len(full_state), len(full_state)))
+    dim1B = user_data["dim1B"]
+    idp_b = user_data["idp_b"]
+    subset_size = user_data["subset_sizes"]
+    DTYPE = user_data["DTYPE"]
+    
+    
+    H1B = np.zeros((dim1B, ))# store as vector since diagonal
+    
     for i in states:
-        H1B[i,i] = energy_const * np.dot(full_state[i][0:3], full_state[i][0:3]) #0:3 doesn't include 3
+      
+        H1B[i] = energy_const * np.dot(full_state[i][0:3], full_state[i][0:3]) #0:3 doesn't include 3
         
-    H2B=[np.zeros((block_sizes[i],block_sizes[i])) for i in bs_len]#initialize list of block matrices
+    H2B=[np.zeros((block_sizes[i],block_sizes[i]), DTYPE) for i in bs_len]#initialize list of block matrices
+    
     for blocky in bs_len:# fill in all blocks
-        #print(block)
-        Hermitian=copy.copy(subset2B[blocky])# I plan to exploit H2B's hermiticity: 
+      
+        disp = subset_size[blocky]
+        
+        Hermitian = copy.copy(subset2B[blocky])# I plan to exploit H2B's hermiticity: 
         #Once a pair (p,q) has been considered in the bra, then it won't be considered 
         #in the ket via my loop. I will manually compute the transpose.
-        for (p,q) in subset2B[blocky]:
+        for (p,q) in subset2B[blocky]: #I could use enumerate 
+          
+            #Get respective indices of pairs in each block
+            block_loc_pq = idp_b[blocky][(p,q)]
+            #block_loc_pq=bas_block2B[blocky].index((p,q))
+            block_loc_qp = block_loc_pq + disp
+            #block_loc_qp=bas_block2B[blocky].index((q,p))
+          
             for (r,s) in Hermitian:
-                #print([(p,q),(r,s)])
+
                 
-                #Get respective indices of pairs in each block
-                block_loc_pq=bas_block2B[blocky].index((p,q))
-                block_loc_rs=bas_block2B[blocky].index((r,s))
-                block_loc_qp=bas_block2B[blocky].index((q,p))
-                block_loc_sr=bas_block2B[blocky].index((s,r))
+                block_loc_rs = idp_b[blocky][(r,s)]
+                #block_loc_rs=bas_block2B[blocky].index((r,s))
+
+                block_loc_sr = block_loc_rs + disp
+                #block_loc_sr=bas_block2B[blocky].index((s,r))
+                
+                
+#                if (np.all( full_state[p][0:3] + full_state[q][0:3] != full_state[r][0:3] + full_state[s][0:3] )):
+#                    print("CM Momentum is not being conserved!")
+                #ensure that center of mass momentum is conserved for all matrix elements
                 
                 #Compute anti-symmetrized matrix element <(p,q)| H2B |(r,s)>_AS
-                if (np.all( full_state[p][0:3] + full_state[q][0:3] != full_state[r][0:3] + full_state[s][0:3] )):
-                    print("CM Momentum is not being conserved!")
-                #ensure that center of mass momentum is conserved for all matrix elements
-                H2B[blocky][block_loc_pq,block_loc_rs] = (H2B_element(p,q,r,s,full_state,Combined_consts, k_alpha,degen,L)
-                -H2B_element(p,q,s,r,full_state,Combined_consts, k_alpha,degen,L))#obtain anti-symm matrix element
+#                H2B[blocky][block_loc_pq,block_loc_rs] = (H2B_element(p,q,r,s,full_state,Combined_consts, k_alpha,degen,L)
+#                -H2B_element(p,q,s,r,full_state,Combined_consts, k_alpha,degen,L))#obtain anti-symm matrix element
+ 
+                H2B[blocky][block_loc_pq,block_loc_rs] = (simple_H2B_element(p,q,r,s,full_state,Combined_consts, k_alpha,degen,L)
+                -simple_H2B_element(p,q,s,r,full_state,Combined_consts, k_alpha,degen,L))#obtain anti-symm matrix element               
+                
                 #Use properties of anti-symmetrized matrix elements
                 H2B[blocky][block_loc_pq,block_loc_sr]= -H2B[blocky][block_loc_pq,block_loc_rs]
                 H2B[blocky][block_loc_qp,block_loc_rs]= -H2B[blocky][block_loc_pq,block_loc_rs]
@@ -1680,7 +1714,7 @@ def normal_order(H1B, H2B, user_data):
   
   for i in holes:
     
-    E += H1B[i,i]
+    E += H1B[i]
     
   for block_num in bs_len:
  #subset_holes has pairs (i,j) for i<j  --> allowed by exclusion principle.
@@ -1698,7 +1732,7 @@ def normal_order(H1B, H2B, user_data):
     
      i1 = idp_b[block_num][(i,p)]
      
-     f[p, p] += H2B[block_num][i1, i1]  #since (i,p) and (i,q) are in the same 
+     f[p] += H2B[block_num][i1, i1]  #since (i,p) and (i,q) are in the same 
      #Blk, p = q
 
   # 2B piece of new normal ordered Hamiltonian is H2B. No need for corrections to H2B
@@ -1713,30 +1747,26 @@ def normal_order(H1B, H2B, user_data):
 def calc_mbpt2(f, Gamma, user_data):
   
   DE2 = 0.0
-  bs_len = user_data["bs_len"]
+  #bs_len = user_data["bs_len"]
   #idp    = user_data["idp"]
   idp_b    = user_data["idp_b"]
   
   Particle_P = user_data["Particle_P"]
   Hole_H = user_data["Hole_H"]
+  HH_PP_Filter = user_data["HH_PP_Filter"] 
   
-  for block_num in bs_len:# go through blocks
+  for block_num in HH_PP_Filter:# go through blocks with HH and PP terms
       
-    if Particle_P[block_num]:
+    for (i,j) in Hole_H[block_num]:
+    
+      index = idp_b[block_num][(i,j)]# I can reuse this
       
-      for (i,j) in Hole_H[block_num]:
+      for (a,b) in Particle_P[block_num]:
       
-        index = idp_b[block_num][(i,j)]# I can reuse this
         
-        for (a,b) in Particle_P[block_num]:
-        
-          
-          #i1 = idp_b[block_num][(a,b)]
-          #i2 = idp_b[block_num][(i,j)]
-          
-          denom = f[i,i] + f[j,j] - f[a,a] - f[b,b]
-          me    = Gamma[block_num][idp_b[block_num][(a,b)], index]
-          DE2  += me*me/denom
+        denom = f[i] + f[j] - f[a] - f[b]
+        me    = Gamma[block_num][idp_b[block_num][(a,b)], index]
+        DE2  += me*me/denom
 
   return DE2
 
@@ -1888,211 +1918,89 @@ def time_test_for_map(Gamma, idp_b, subset2B, full_state, mom_to_blk_nums, idp):
           
   print("Using just idp",time.time() - start_time)
   
-def Omega_checker1(Omega, HH_PP_Filter, bs_len):
-
-  for block_num in bs_len:
-    
-    if block_num not in HH_PP_Filter:
-      
-      norm = LA.norm(Omega[block_num])
-      
-      if(norm  != 0.0):
-         
-        puzzle.append((block_num, norm))
   
-def Omega_checker(Omega, Hole_H, Particle_P, bs_len):
+def Omega_checker(Omega, bs_len, Zero_Blocks):
    
    
   for block_num in bs_len:
      
-    if(not Hole_H[block_num] or not Particle_P[block_num]):
-       
-      if(LA.norm(Omega[block_num]) != 0.0):
+    if(LA.norm(Omega[block_num]) != 0.0):
          
-        print(LA.norm(Omega[block_num]))
+      if(block_num in Zero_Blocks):
+        
+        del Zero_Blocks[Zero_Blocks.index(block_num)]
+        
+        
+  return
         
 #    if( Hole_H[block_num] and Particle_P[block_num]):
 #       
 #         
-#      print(LA.norm(Omega[block_num]))  
-def worm(Omega, bs_len, s, countering):
-
-  for block_num in bs_len:
-
-    #if(LA.norm(Omega[block_num]) == 0.0 and s!=0):
-    if(LA.norm(Omega[block_num]) == 0.0):
-         
-      countering.append(block_num)
-       
-def fermi_understanding(bas_block2B, fermi_index):
-
-  for blocks in bas_block2B:
-
-    first = blocks[0]        
-    
-    type_blk = []
-    
-    if(first[0]< fermi_index and first[1]< fermi_index):
-      
-      type_blk.append("hh")
-      
-    if(first[0]< fermi_index and first[1]>= fermi_index):
-      
-      type_blk.append("hp")
-
-    if(first[0]>= fermi_index and first[1]< fermi_index):
-      
-      type_blk.append("ph")
-
-    if(first[0]>= fermi_index and first[1]>= fermi_index):
-      
-      type_blk.append("pp")
-      
-
-    for (a,b) in blocks:
-      
-      if(a< fermi_index and b <fermi_index):
-        
-        type_blk.append("hh")
-        
-      if(a< fermi_index and b>= fermi_index):
-        
-        type_blk.append("hp")
-  
-      if(a>= fermi_index and b< fermi_index):
-        
-        type_blk.append("ph")
-  
-      if(a>= fermi_index and b>= fermi_index):
-        
-        type_blk.append("pp")
-        
-        
-#    if("ph" in type_blk and "pp" in type_blk):
-#      
-#      print("ph and pp are in same blk")
-#      print(blocks)
-#      sys.exit()
-      
-    if("ph" in type_blk and "hh" in type_blk):
-      
-      print("ph and hh are in same blk")
-      print(blocks)
-      sys.exit()  
-      
-
-def is_ph(first , fermi_index):
-
-  if(first[0]< fermi_index and first[1]< fermi_index):
-    
-    return "hh"
-    
-  if(first[0]< fermi_index and first[1]>= fermi_index):
-    
-    return "hp"
-
-  if(first[0]>= fermi_index and first[1]< fermi_index):
-    
-    return "ph"
-
-  if(first[0]>= fermi_index and first[1]>= fermi_index):
-    
-    return "pp"      
-      
-def zero_block_understanding(bas_block2B, stats, fermi_index, bs_len):
-  
-  signature = {}
-
-  for keys in stats.keys():
-    
-    signature[keys] = [is_ph(bas_block2B[keys][0] , fermi_index)]
-
-    for (a,b) in bas_block2B[keys]:
-      
-      sig = is_ph((a,b) , fermi_index)
-      
-      if sig not in signature[keys]:
-        
-        signature[keys].append(sig)
-   
-  stagnant = {}
-     
-  for block_num in bs_len:
-
-    if block_num not in stats.keys():
-      
-      stagnant[block_num] = [is_ph(bas_block2B[block_num][0] , fermi_index)]
-
-      for (a,b) in bas_block2B[block_num]:
-        
-        sig = is_ph((a,b) , fermi_index)
-        
-        if sig not in stagnant[block_num]:
-          
-          stagnant[block_num].append(sig)  
-          
-      if "ph" in stagnant[block_num] and len(stagnant[block_num])==2:
-        
-        print("There's a block with only ph terms that is non-zero")
-        
-  print(stagnant)
-  
-  
-def understanding(eta, omega):
-  
-  if(len(eta) != len(omega)):
-    
-    print("They're not the same size")
-    
-    sys.exit()
-    
-  
-  for keys in eta:
-    
-    if omega[keys] != eta[keys]:
-      
-      
-      print( omega[keys], eta[keys])
-      print("They're not equal")
-    
-      sys.exit()
-      
-    
+#      print(LA.norm(Omega[block_num]))        
 #------------------------------------------------------------------------------
 # Main program
 #------------------------------------------------------------------------------
+  
 
 def main():
 
+  print("This code uses precalculated magic numbers to determine Nmax for a given number of hole states")
+  
+  print("Magic_Numbers.txt must be in same directory as this file")
+  
+  f = open("Magic_Numbers.txt", "r")
+  
+  Magic_Numbers = f.read() #Magic numbers from N_max = 0 : N_max = 200
+  #Magic_Numbers[0] is 0th shell  
+  
+  Magic_Numbers = pre_process(Magic_Numbers)# convert them into list of ints
+  
   ####Can change N_Max (determines # of particles),rho (determines size of box and Fermi lvl), and degen (type of matter) ######
-  N_Max = 0 #Define N_Max
-  rho = 0.2 #Define density in fm^-3
+  
+  A = 14 #specify number of particles you want to include
+    
+  N_Max = 1 #How many shells above the holes you want to include. Unlike before,
+  #N_max cannot equal 0. We need particle states!
+  
+  
+  rho = 0.2 #Define density in fm^-3  
+  
   degen = 2#If degen=4, then the matter is symmetric and isospin projections are considered. If degen=2, there is only
   #one type of particle, so isospin projections are not considered. Degen is only either 2 or 4. 
 
-  temp_full_state = full_state_gen_3D(N_Max+1,degen)#this contains the "positive states" of the system
-  #Notice that N_Max is shifted up by one to generate particle states. The true N_Max is still the one given above.
-  #As the way it is coded now, all particle states above the given N_Max are used. Perhaps, it in the future, it may be best to 
-  #Select the states above the given N_Max that I want to use for the calcuation. Just a thought....
+  temp_full_state, hole_Nmax = get_N_max_newshells(N_Max, A, degen, Magic_Numbers)
+  
 
   #############################
 
-  full_state = sorter(temp_full_state, N_Max)#order the states so that holes come before particle states in the list. I like it that way
-  full_state=np.array(full_state)#covert it to an array for easy viewing
+  full_state = sorter(temp_full_state, hole_Nmax)#order the states so that holes come before particle states in the list. I like it that way
+  
+  full_state = np.array(full_state)#covert it to an array for easy viewing
   #Note that full state corresponds to single particle states labled by mode #'s n, not wavenumbers k
 
+  #print(full_state)
+  
   fully.append(full_state)
-  holes, particles=One_BD_States(N_Max, full_state)
+  
+  holes, particles = One_BD_States(hole_Nmax, full_state)
   
   states = holes + particles
-  A=len(holes) 
+  
+  if (A !=len(holes)):
+    
+    print("The number of holes aren't what they should be. Something went wrong.")  
+    
   L=(A/rho)**(1/3)
+  
   print("Box Size (fm): ", L)
+  
   print("Number of particles: ", A)
   
   Combined_consts=[(200/L**3)*(np.pi/1.487)**(3/2), -(178/L**3)*(np.pi/0.639)**(3/2), -(91.85/L**3)*(np.pi/0.465)**(3/2)]
   #Combined constants for matrix element. 
+  
   k_alpha=[1.487,0.639,0.465] #R,T,S
+  
   energy_const=(197.3269)**2/(2*939.565)*(2*np.pi/L)**2 #hbar^2/2m in MeV fm^2
   
   # setup shared data
@@ -2119,21 +2027,19 @@ def main():
   idp, idp_b = special_index(bas_block2B)
   
   #Initialize OP_Map with fixed variables idp, idp_b
-  OP_Map_B.idp_b = idp_b
-  OP_Map.idp_b = idp_b
-  OP_Map.idp = idp
+  #OP_Map_B.idp_b = idp_b
+  #OP_Map.idp_b = idp_b
+  #OP_Map.idp = idp
 
   fermi_index = particles[0]# so we know who's a hole, and who's not
-  
-  #fermi_understanding(bas_block2B, fermi_index)
   
   start_time = time.time()
   
   basph_block2B = ph_block_constructor(subset2B, full_state, fermi_index, len(bas2B), dim1B)
   
   print("Time Taken to obtain ph_blocks--- %s Minutes ---" % (round((time.time() - start_time)/60,4)))
+  #print(basph_block2B)
   
-  print(len(basph_block2B))
   #print(bas_block2B[1])
   
   #print("Running Tests on basph_block2B!")
@@ -2142,14 +2048,14 @@ def main():
   
   #print("Ended Tests on basph_block2B")
 
-  #print("zero", bas_block2B[17])
   
+  DTYPE = np.float64
 
   # occupation number matrices
-  occ1B     = construct_occupation_1B(dim1B, holes, particles)
-  occB_2B   = construct_occupationB_2B(block_sizes, bas_block2B, occ1B, bs_len)
-  occC_2B   = construct_occupationC_2B(block_sizes, bas_block2B, occ1B, bs_len)
-  occphA_2B = construct_occupationA_2B(basph_block2B, occ1B)#block matrices for ph trans
+  occ1B     = construct_occupation_1B(dim1B, holes, particles, DTYPE)
+  occB_2B   = construct_occupationB_2B(block_sizes, bas_block2B, occ1B, bs_len, DTYPE)
+  occC_2B   = construct_occupationC_2B(block_sizes, bas_block2B, occ1B, bs_len, DTYPE)
+  occphA_2B = construct_occupationA_2B(basph_block2B, occ1B, DTYPE)#block matrices for ph trans
   
   np.set_printoptions(linewidth=np.inf)
   
@@ -2157,12 +2063,13 @@ def main():
 #    print(blks)
 
   
-  bn2=Bernoulli_generator(8)# Go up to 3 terms in expansion
+  bn2=Bernoulli_generator(6)# Go up to 3 terms in expansion
   bn2[1]=-0.5#follow 2nd convention for Bernouli numbers   
   
   # store shared data in a dictionary, so we can avoid passing the basis
   # lookups etc. as separate parameters all the time
   user_data  = {
+    "DTYPE": DTYPE,  
     "dim1B":      dim1B, 
     "holes":      holes, 
     "particles":  particles,
@@ -2198,7 +2105,11 @@ def main():
 
   global_user_data.append(user_data) # for use in other scripts
   # set up initial Hamiltonian
-  H1B,H2B=Inf_Matter_Ham(full_state, energy_const, Combined_consts, k_alpha, degen, L, user_data)
+  
+  start_time = time.time()
+  H1B, H2B=Inf_Matter_Ham(full_state, energy_const, Combined_consts, k_alpha, degen, L, user_data)
+  
+  print("Time Taken to obtain Minnesota Potential-- %s Minutes ---" % (round((time.time() - start_time)/60,4)))
   #print(OP_Map_Test(bas2B, block_sizes, bas_block2B, idp, H2B))#ensure that OP_Map is doing what it needs
 
   E, f, Gamma = normal_order(H1B, H2B, user_data)#Normal ordered Hamiltonian with Hartree Fock energy
@@ -2223,28 +2134,9 @@ def main():
   #Transformed_Hamiltonian = Transformed_Ham(Initial_Omega1, Initial_Omega2, user_data)
   Transformed_Hamiltonian = E, f, Gamma #initial transformation preserves H
   
-  worm(Gamma, bs_len, 2, temppy)
-  
-  print("Number of blocks:", len(bs_len))
-  
-  #initial_nonzero = [blk_nummy for blk_nummy in bs_len if blk_nummy not in temppy]
-  
-  #print("Non-zero blocks in H(0):", initial_nonzero )
-  
   #time_test_for_map(Gamma, idp_b, subset2B, full_state, mom_to_blk_nums, idp)
   
-  eta_2BB = user_data["calc_eta"](Transformed_Hamiltonian[1], Transformed_Hamiltonian[2], user_data)
-    
-  
-  worm(eta_2BB, bs_len, 2, temppy1)
-  
-  #print(temppy1)
-  
-  #initial_eta_nonzero = [blk_nummy for blk_nummy in bs_len if blk_nummy not in temppy1]
-  
-  #print("Non-zero blocks in eta(0):", initial_eta_nonzero )
-  #print(bas_block2B[1])
-  
+  #eta_1B, eta_2B = user_data["calc_eta"](Transformed_Hamiltonian[1], Transformed_Hamiltonian[2], user_data)
   
   #user_data["eta_norm"] = np.linalg.norm(eta_1B, ord='fro') + calc_full2B_norm(eta_2B, subset2B,bs_len,idp_b)
   
@@ -2258,19 +2150,17 @@ def main():
   ds = 1
   num_points = (sfinal-sinitial)/ds +1
   flow_pars = np.linspace(sinitial,sfinal,int(num_points))
-  print( "Reference Energy (MeV):", round(E,4))
+  print( "Reference Energy/A (MeV):", round(E/A,4))
   #print(eta_white(f,Gamma, user_data)[0])
   
   print ("%-14s   %-11s   %-14s   %-14s   %-14s  %-14s   %-14s   %-14s"%(
     "s", "E/A" , "DE(2)", "DE(3)", "E+DE", 
     "||eta||", "||fod||", "||Gammaod||"))
   # print "-----------------------------------------------------------------------------------------------------------------"
-  print ("-" * 130)
+  print ("-" * 126)
   start_time = time.time()
   DE3=0.0
-  
-  #worm(Gamma, bs_len, 1, countering1)
-  #worm(Initial_Omega2, bs_len, 1, countering2)
+  Zero_Blocks = list(bs_len)
   
   for flow_p in flow_pars:
       
@@ -2287,7 +2177,7 @@ def main():
     norm_fod = 0.0 #from momentum conservation
     norm_Gammaod = calc_Gammaod_norm(Gamma, user_data)
     
-    ys = ds * derivative_wrapper(Omega_F, user_data, Transformed_Hamiltonian, flow_p) + Omega_F
+    ys = ds * derivative_wrapper(Omega_F, user_data, Transformed_Hamiltonian) + Omega_F
 
     print ("%8.5f %14.8f   %14.8f   %14.8f   %14.8f   %14.8f   %14.8f   %14.8f"%(
         flow_p, E/A , DE2, DE3, E+DE2+DE3, user_data["eta_norm"], norm_fod, norm_Gammaod))
@@ -2296,113 +2186,52 @@ def main():
 
     Omega_2B = get_operator_from_y(ys, dim1B, block_sizes,bs_len)#get new Omegas
     
-    Omega_checker1(Omega_2B, HH_PP_Filter, bs_len)
+    Omega_checker(Omega_2B, bs_len, Zero_Blocks)
     
+    E_prev = E
     
     Transformed_Hamiltonian = Transformed_Ham(Omega_2B, user_data)#get  Hamiltonian to use MBPT, and print out values
     E, f , Gamma = Transformed_Hamiltonian #get  Hamiltonian to use MBPT, and print out values
-   # worm(Gamma, bs_len, flow_p, countering1)
-    worm(Omega_2B, bs_len, flow_p, countering2)
+    
     #if (abs(DE2/E) < 10e-8):
-    if (user_data["eta_norm"] < 10e-2):
-        print("Time Taken to Run--- %s Minutes ---" % (round((time.time() - start_time)/60,4)))
-        print( "Correlation Energy (MeV):", round(E-user_data["E"],4))
-        print("Energy per particle (MeV):", round(E/A, 4))
-        results.append([E,f,Gamma,Omega_2B])
-        
-        zeros_omega.append(Counter(countering2))
-        #zeros_H.append(Counter(countering1))
-        #zeros_eta.append(Counter(countering))
-        #print(Counter(countering))
-        #understanding(zeros_eta[0], zeros_omega[0])
-        #zero_block_understanding(bas_block2B, Counter(countering2), fermi_index, bs_len)
+    if (user_data["eta_norm"] < 1e-2): 
+    #if ((E_prev - E)/A < 1e-2): 
+      
         break
+      
     Omega_F = List_reshape(Omega_2B,block_sizes, bs_len)
     
-#  for keys in zeros_H[0].keys():
-#    
-#    if zeros_H[0][keys] == flow_p+2:
-#      
-#      if(zeros_omega[0][keys] != flow_p+1):
-#        
-#        print("It is not true that if a block in H is always zero, then that block in Omega is always zero")
-        
-  
-#  for numbas in initial_nonzero:
-#    
-#    if numbas in zeros_H[0].keys():
-#      
-#      print("There's a block initially non-zero in H that later gets zeroed out")
-  
-  omega_nonzero = []
-  
-  for candidates in bs_len:
     
-    if candidates not in zeros_omega[0].keys():
-      
-      omega_nonzero.append(candidates)
+  calc_eta = user_data["calc_eta"]  
+  Eta_2B = calc_eta(f, Gamma, user_data)
+  
+  # share data
+  #user_data["dE"] = dOmega_0B #storing dOmega_0B/ds in dE
+  user_data["eta_norm"] =  calc_full2B_norm(Eta_2B, subset2B,bs_len,idp_b) 
     
-    else:
-    
-      if zeros_omega[0][candidates] != flow_p+1:#it was nonzero at least once
-        
-        omega_nonzero.append(candidates)
-      
-  print("fraction of blocks that stay untouched", (len(bs_len)-len(omega_nonzero))/len(bs_len) )
+  energy.append(E)#append energy for plotting
+  flow.append(flow_p+1)#append flow parameter for plotting
+  DE2 = calc_mbpt2(f, Gamma, user_data)
+  #DE3 = calc_mbpt3(f, Gamma, user_data)
+
+  #norm_fod     = calc_fod_norm(f, user_data)
+  norm_fod = 0.0 #from momentum conservation
+  norm_Gammaod = calc_Gammaod_norm(Gamma, user_data)      
+  print ("%8.5f %14.8f   %14.8f   %14.8f   %14.8f   %14.8f   %14.8f   %14.8f"%(
+  flow_p+1, E/A , DE2, DE3, E+DE2+DE3, user_data["eta_norm"], norm_fod, norm_Gammaod))      
   
-  #print("check", sorted(omega_nonzero))
   
-  
-#  H_nonzero = []
-#  
-#  for candidates in bs_len:
-#    
-#    if candidates not in zeros_H[0].keys():
-#      
-#      H_nonzero.append(candidates)
-#    
-#    else:
-#    
-#      if zeros_H[0][candidates] != flow_p+2:#it was nonzero at least once
-#        
-#        H_nonzero.append(candidates)
-      
-  
-#  print("O_nonzero", sorted(omega_nonzero))
-#  print("---")
-#  print("H_nonzero", sorted(H_nonzero))
-#  print("----")
-#  print(puzzle)
-#  
-#  if len(omega_nonzero) + len(zeros_omega[0]) != len(bs_len):
-#    
-#    print("stuff doesn't ADD UP")
-#  
-#  if sorted(omega_nonzero) != sorted(initial_eta_nonzero):
-#        
-#        
-#    print("It is not true that all non zero blks in eta(0) determine the non-zero blks in Omega(s)")
-#    
-#    print(omega_nonzero)
-        
-   
-    
+  print("Time Taken to Run--- %s Minutes ---" % (round((time.time() - start_time)/60,4)))
+  print( "Correlation Energy (MeV):", round(E-user_data["E"],4))
+  print("Energy per particle (MeV):", round(E/A, 4))
+  print("Fraction of blocks of Omega that stayed zero", len(Zero_Blocks)/len(bs_len))
+  results.append([E, f, Gamma, Omega_2B])   
     
 #------------------------------------------------------------------------------
 # make executable
 #------------------------------------------------------------------------------
-  
 main()
-#print(temppy)
-#print("___")
-#print(zeros_H[0])
-#print("___")
-#print(zeros_omega[0])
-#for keys in zeros_H[0].keys():
-#
-#    if (zeros_H[0][keys]!= zeros_omega[0][keys]+1 ):
-#        print([keys, zeros_H[0][keys],zeros_omega[0][keys]] )
-#        print("not in it")  
+
 #cProfile.run("main()")     
 #if __name__ == "__main__": 
 #  main()
