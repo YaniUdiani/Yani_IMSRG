@@ -1915,7 +1915,7 @@ def main():
   
   A = 14 #specify number of particles you want to include
     
-  N_Max = 4 #How many shells above the holes you want to include. Unlike before,
+  N_Max = 9 #How many shells above the holes you want to include. Unlike before,
   #N_max cannot equal 0. We need particle states!
   
   
