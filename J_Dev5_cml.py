@@ -2041,6 +2041,12 @@ def main(args):
   bas2B,subset2B,block_sizes,subset_sizes,bas_block2B,blk_nums_to_mom = construct_basis_2B(full_state,states)
   
   print("Number of blocks in bas2B: ", len(bas_block2B))
+  
+  print("Very crude estimate for memory demand of program (GB): ", 
+      round(( np.sum(np.array(block_sizes)**2)* 8 * ( 11 + 5)  + 8*4*dim1B)  /1e9, 4 ))#*8 for sizeof(double), 
+  #+11 for crudely counting number of 2BD block matrices, + 5 for guess for 
+  #other overhead from objects that are not matrices, and +4 *dim1B* sizeof(double) for number of 1BD arrays
+  
   print(" ")
     
   Particle_P, Hole_H, Particle_A, Hole_A = pair_selector(bas_block2B, particles, holes)
