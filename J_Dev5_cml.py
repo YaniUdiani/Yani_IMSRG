@@ -38,15 +38,15 @@ import argparse
 #-----------------------------------------------------------------------------------
 flow=[] #list of flow parameters
 energy=[]#list of energies for plotting
-Magic=[]
-HH=[]
-initializations = [] #used to store E_ref, and f_Hartree-fock
+#Magic=[]
+#HH=[]
+#initializations = [] #used to store E_ref, and f_Hartree-fock
 results = [] #used to store E_g.s, f,Gamma, Omega1B, Omega2B 
-global_user_data =[]
-bass = []
-bass1 = []
-full = []
-fully = []
+#global_user_data =[]
+#bass = []
+#bass1 = []
+#full = []
+#fully = []
 #-----------------------------------------------------------------------------------
 # Functions to compute Infinite Matter single particle states
 #-----------------------------------------------------------------------------------
@@ -2005,7 +2005,7 @@ def main(args):
 
   #print(full_state)
   
-  fully.append(full_state)
+  #fully.append(full_state)
   
   holes, particles = One_BD_States(hole_Nmax, full_state)
   
@@ -2042,11 +2042,7 @@ def main(args):
   
   print("Number of blocks in bas2B: ", len(bas_block2B))
   print(" ")
-  
-  full.append(full_state)
-  bass1.append(bas_block2B)
-  bass.append(subset2B)
-  
+    
   Particle_P, Hole_H, Particle_A, Hole_A = pair_selector(bas_block2B, particles, holes)
   
   HH_PP_Filter, Hole_A_Filter = ph_filtering(Hole_H, Particle_P, Hole_A)
@@ -2144,7 +2140,7 @@ def main(args):
     #"OP_Map": OP_Map
   }
 
-  global_user_data.append(user_data) # for use in other scripts
+  #global_user_data.append(user_data) # for use in other scripts
   # set up initial Hamiltonian
   
   start_time = time.time()
@@ -2153,9 +2149,11 @@ def main(args):
   print("Time Taken to obtain Minnesota Potential-- %s Minutes ---" % (round((time.time() - start_time)/60,4)))
   #print(OP_Map_Test(bas2B, block_sizes, bas_block2B, idp, H2B))#ensure that OP_Map is doing what it needs
 
+  start_time = time.time()
   E, f, Gamma = normal_order(H1B, H2B, user_data)#Normal ordered Hamiltonian with Hartree Fock energy
-  HH.append(H2B)
-  initializations.append([E,f, Gamma])
+  
+  timer_normal_order = round((time.time() - start_time)/60,4)
+  
   
   #print(fully.append(Gamma) )
   #eigs.extend(np.linalg.eig(Gamma)[0])#store eigenvalues of H2B. This is interesting
@@ -2165,25 +2163,9 @@ def main(args):
   user_data["f"]= f
   user_data["Gamma"]= Gamma
   
-  #print(subset2B[7])
-  #print(list(reverse_enumerate(subset2B[7],subset_sizes[7])))
   
-  #Initializations
-  #Initial_Omega0=0.
-  #Initial_Omega1=np.zeros((dim1B,dim1B))
-  Initial_Omega2=[np.zeros((block_sizes[i],block_sizes[i])) for i in bs_len]#initialize list of block matrices
-  #Transformed_Hamiltonian = Transformed_Ham(Initial_Omega1, Initial_Omega2, user_data)
   Transformed_Hamiltonian = E, f, Gamma #initial transformation preserves H
-  
-  #time_test_for_map(Gamma, idp_b, subset2B, full_state, mom_to_blk_nums, idp)
-  
-  #eta_1B, eta_2B = user_data["calc_eta"](Transformed_Hamiltonian[1], Transformed_Hamiltonian[2], user_data)
-  
-  #user_data["eta_norm"] = np.linalg.norm(eta_1B, ord='fro') + calc_full2B_norm(eta_2B, subset2B,bs_len,idp_b)
-  
-  # reshape generator into a linear array (initial ODE vector)
-  y0   = List_reshape(Initial_Omega2,block_sizes, bs_len)
-  Omega_F= y0# flattened Omega
+  print("Time Taken to normal order potential-- %s Minutes ---" % (timer_normal_order))  
   
   # integrate flow equations 
   sinitial=0
@@ -2341,7 +2323,8 @@ def main(args):
   
   print(" ")
   
-  results.append([E, f, Gamma, Omega_2B, frac, diff, dim1B, Zero_Blocks, blk_nums_to_mom])   
+  #results.append([E, f, Gamma, Omega_2B, frac, diff, dim1B, Zero_Blocks, blk_nums_to_mom])
+  results.append([E, 0, 0 , Omega_2B, frac, diff, dim1B, Zero_Blocks, blk_nums_to_mom])#don't need f & Gamma right now    
 
 #------------------------------------------------------------------------------
 # make executable
