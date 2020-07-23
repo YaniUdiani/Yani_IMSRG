@@ -112,16 +112,17 @@ num_sp_states = res[6] # get number of s.p states
 plt.plot(rhos, E)
 plt.ylabel("E/A (MeV)")
 plt.xlabel("density (fm^-3)")
-plt.title("EOS for " + str (A) + " particles with N_max = " + str(N_Max))
+plt.title("EOS for " + str (A) + " particles with " + str(num_sp_states) + " sp states")
 #plt.savefig("EOS_(" + str (A) + "_" +str(N_Max) + "_" +str(rho) 
 #+ " (" + str(datetime.datetime.now()) + ")" )
 plt.tight_layout()
-plt.savefig("EOS_(" + str (A) + "_" +str(num_sp_states) + ")_" 
+plt.savefig("EOS_(" + str (A) + "_" +str(N_Max) + "_" + str(num_points) + ")_" 
             + str(datetime.datetime.now()) +".png" ,format = "png", dpi= 500)
 
 eos_data = pd.DataFrame({"den": rhos, "E": E})
 
-np.savetxt(r'eos.txt', eos_data.values, fmt='%1.9f')
+np.savetxt(r'eos' + "_" + str (A) + "_" +str(N_Max) + "_" + str(num_points) + "_"
+            + str(datetime.datetime.now()) + '.txt', eos_data.values, fmt='%1.9f')
 
 #with open('EOS.txt', 'w') as f:
 #    for item in E:
@@ -135,12 +136,13 @@ plt.figure()
 plt.plot(rhos, fraction_zero)
 plt.ylabel("Fraction Zero Blks ")
 plt.xlabel("density (fm^-3)")
-plt.title(" Fraction of zero blocks in Omega (A = " + str (A) + ", N_max = " + str(N_Max) +")")
+plt.title(" Fraction of zero blocks in Omega (A = " + str (A) + ", num sp states = " + str(num_sp_states) +")")
 plt.tight_layout()
-plt.savefig("ZeroOmega_(" + str (A) + "_" +str(num_sp_states) + ")_" 
+plt.savefig("ZeroOmega_(" + str (A) + "_" +str(N_Max) + "_" + str(num_points) + ")_" 
             + str(datetime.datetime.now())+ ".png",format = "png", dpi= 500)
 
 eos_data_1 = pd.DataFrame({"den": rhos, "fraction_zero": fraction_zero})
 
-np.savetxt(r'zeroblks.txt', eos_data_1.values, fmt='%1.9f')
+np.savetxt(r'zeroblks' + "_" + str (A) + "_" +str(N_Max) + "_" + str(num_points) + "_"
+            + str(datetime.datetime.now()) +'.txt', eos_data_1.values, fmt='%1.9f')
 #plt.tick_params(width=10)
