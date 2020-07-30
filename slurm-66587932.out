@@ -1,0 +1,378 @@
+ 
+This code uses precalculated magic numbers to determine Nmax for a given number of hole states
+Magic_Numbers.txt must be in same directory as this file
+ 
+Box Size (fm):  10.969613104865235
+Number of particles:  66
+Number of SP states: 514
+Number of blocks in bas2B:  5391
+Very crude estimate for memory demand of program (GB):  4.248
+ 
+Fraction of blks that both have Hole_H and Particle_Hole terms:  0.0978
+Fraction of blks that both have Hole_Anything pairs:  0.4146
+Total size of ph blocks compared to size of full 2B matrix:  0.000455
+ 
+Time Taken to obtain ph_blocks--- 0.6519 Minutes ---
+Time Taken to obtain Minnesota Potential-- 6.8448 Minutes ---
+Time Taken to normal order potential-- 0.0007 Minutes ---
+ 
+Reference Energy/A (MeV): 7.8279
+ 
+s                E/A           DE(2)            DE(3)            E+DE            ||eta||          ||fod||          ||Gammaod||   
+------------------------------------------------------------------------------------------------------------------------------
+ 0.00000     7.82792643     -16.03587110       0.00000000     500.60727359       1.73761416       0.00000000      87.20756564
+ 1.00000     7.59264513      -0.46814671       0.00000000     500.64643202       0.32711734       0.00000000      12.74462868
+ 2.00000     7.58515138      -0.02955283       0.00000000     500.59043822       0.09086673       0.00000000       2.89463680
+ 3.00000     7.58456413      -0.00308476       0.00000000     500.57814809       0.02993112       0.00000000       0.90888014
+ 
+Time Taken to Run--- 25.9273 Minutes ---
+ 
+Correlation Energy/A (MeV): -0.2434
+ 
+Energy per particle (MeV): 7.5846
+ 
+Fraction of blocks of Omega that stayed zero 0.6351326285 = 3424 / 5391
+ 
+ 
+This code uses precalculated magic numbers to determine Nmax for a given number of hole states
+Magic_Numbers.txt must be in same directory as this file
+ 
+Box Size (fm):  9.966554934125961
+Number of particles:  66
+Number of SP states: 514
+Number of blocks in bas2B:  5391
+Very crude estimate for memory demand of program (GB):  4.248
+ 
+Fraction of blks that both have Hole_H and Particle_Hole terms:  0.0978
+Fraction of blks that both have Hole_Anything pairs:  0.4146
+Total size of ph blocks compared to size of full 2B matrix:  0.000455
+ 
+Time Taken to obtain ph_blocks--- 0.6646 Minutes ---
+Time Taken to obtain Minnesota Potential-- 6.958 Minutes ---
+Time Taken to normal order potential-- 0.0008 Minutes ---
+ 
+Reference Energy/A (MeV): 9.042
+ 
+s                E/A           DE(2)            DE(3)            E+DE            ||eta||          ||fod||          ||Gammaod||   
+------------------------------------------------------------------------------------------------------------------------------
+ 0.00000     9.04204768     -18.30613026       0.00000000     578.46901674       1.63363704       0.00000000     111.89588429
+ 1.00000     8.77069646      -0.49773117       0.00000000     578.36823520       0.31243192       0.00000000      14.19500464
+ 2.00000     8.76273832      -0.03305015       0.00000000     578.30767909       0.08866830       0.00000000       3.30541204
+ 3.00000     8.76208594      -0.00344934       0.00000000     578.29422242       0.02905532       0.00000000       1.04467229
+ 
+Time Taken to Run--- 26.0735 Minutes ---
+ 
+Correlation Energy/A (MeV): -0.28
+ 
+Energy per particle (MeV): 8.7621
+ 
+Fraction of blocks of Omega that stayed zero 0.6351326285 = 3424 / 5391
+ 
+ 
+This code uses precalculated magic numbers to determine Nmax for a given number of hole states
+Magic_Numbers.txt must be in same directory as this file
+ 
+Box Size (fm):  9.252130018365483
+Number of particles:  66
+Number of SP states: 514
+Number of blocks in bas2B:  5391
+Very crude estimate for memory demand of program (GB):  4.248
+ 
+Fraction of blks that both have Hole_H and Particle_Hole terms:  0.0978
+Fraction of blks that both have Hole_Anything pairs:  0.4146
+Total size of ph blocks compared to size of full 2B matrix:  0.000455
+ 
+Time Taken to obtain ph_blocks--- 0.6554 Minutes ---
+Time Taken to obtain Minnesota Potential-- 6.8783 Minutes ---
+Time Taken to normal order potential-- 0.0008 Minutes ---
+ 
+Reference Energy/A (MeV): 10.0804
+ 
+s                E/A           DE(2)            DE(3)            E+DE            ||eta||          ||fod||          ||Gammaod||   
+------------------------------------------------------------------------------------------------------------------------------
+ 0.00000    10.08038807     -23.06584413       0.00000000     642.23976822       1.62235855       0.00000000     144.05302359
+ 1.00000     9.73567540      -0.51140394       0.00000000     642.04317222       0.29656931       0.00000000      15.46450602
+ 2.00000     9.72750939      -0.03390249       0.00000000     641.98171730       0.08409743       0.00000000       3.56584568
+ 3.00000     9.72683364      -0.00351292       0.00000000     641.96750748       0.02737625       0.00000000       1.12815124
+ 
+Time Taken to Run--- 25.2507 Minutes ---
+ 
+Correlation Energy/A (MeV): -0.3536
+ 
+Energy per particle (MeV): 9.7268
+ 
+Fraction of blocks of Omega that stayed zero 0.6351326285 = 3424 / 5391
+ 
+ 
+This code uses precalculated magic numbers to determine Nmax for a given number of hole states
+Magic_Numbers.txt must be in same directory as this file
+ 
+Box Size (fm):  8.706587691173612
+Number of particles:  66
+Number of SP states: 514
+Number of blocks in bas2B:  5391
+Very crude estimate for memory demand of program (GB):  4.248
+ 
+Fraction of blks that both have Hole_H and Particle_Hole terms:  0.0978
+Fraction of blks that both have Hole_Anything pairs:  0.4146
+Total size of ph blocks compared to size of full 2B matrix:  0.000455
+ 
+Time Taken to obtain ph_blocks--- 0.6423 Minutes ---
+Time Taken to obtain Minnesota Potential-- 6.8132 Minutes ---
+Time Taken to normal order potential-- 0.0007 Minutes ---
+ 
+Reference Energy/A (MeV): 10.9805
+ 
+s                E/A           DE(2)            DE(3)            E+DE            ||eta||          ||fod||          ||Gammaod||   
+------------------------------------------------------------------------------------------------------------------------------
+ 0.00000    10.98047203     -29.22766345       0.00000000     695.48349057       1.65300910       0.00000000     177.72270755
+ 1.00000    10.54129961      -0.51629477       0.00000000     695.20947942       0.28157877       0.00000000      16.57104268
+ 2.00000    10.53307704      -0.03320139       0.00000000     695.14988355       0.07869564       0.00000000       3.72610425
+ 3.00000    10.53240470      -0.00338456       0.00000000     695.13532594       0.02538166       0.00000000       1.17182492
+ 
+Time Taken to Run--- 24.9404 Minutes ---
+ 
+Correlation Energy/A (MeV): -0.4481
+ 
+Energy per particle (MeV): 10.5324
+ 
+Fraction of blocks of Omega that stayed zero 0.6351326285 = 3424 / 5391
+ 
+ 
+This code uses precalculated magic numbers to determine Nmax for a given number of hole states
+Magic_Numbers.txt must be in same directory as this file
+ 
+Box Size (fm):  8.270511730589975
+Number of particles:  66
+Number of SP states: 514
+Number of blocks in bas2B:  5391
+Very crude estimate for memory demand of program (GB):  4.248
+ 
+Fraction of blks that both have Hole_H and Particle_Hole terms:  0.0978
+Fraction of blks that both have Hole_Anything pairs:  0.4146
+Total size of ph blocks compared to size of full 2B matrix:  0.000455
+ 
+Time Taken to obtain ph_blocks--- 0.6399 Minutes ---
+Time Taken to obtain Minnesota Potential-- 6.7352 Minutes ---
+Time Taken to normal order potential-- 0.0005 Minutes ---
+ 
+Reference Energy/A (MeV): 11.7653
+ 
+s                E/A           DE(2)            DE(3)            E+DE            ||eta||          ||fod||          ||Gammaod||   
+------------------------------------------------------------------------------------------------------------------------------
+ 0.00000    11.76532898     -36.02188324       0.00000000     740.48982949       1.69830182       0.00000000     210.33291951
+ 1.00000    11.22188895      -0.51744566       0.00000000     740.12722530       0.26827776       0.00000000      17.55733718
+ 2.00000    11.21367763      -0.03169811       0.00000000     740.07102535       0.07322320       0.00000000       3.82155156
+ 3.00000    11.21302418      -0.00315027       0.00000000     740.05644565       0.02333192       0.00000000       1.18627192
+ 
+Time Taken to Run--- 24.3954 Minutes ---
+ 
+Correlation Energy/A (MeV): -0.5523
+ 
+Energy per particle (MeV): 11.213
+ 
+Fraction of blocks of Omega that stayed zero 0.6351326285 = 3424 / 5391
+ 
+ 
+This code uses precalculated magic numbers to determine Nmax for a given number of hole states
+Magic_Numbers.txt must be in same directory as this file
+ 
+Box Size (fm):  7.9104598934652
+Number of particles:  66
+Number of SP states: 514
+Number of blocks in bas2B:  5391
+Very crude estimate for memory demand of program (GB):  4.248
+ 
+Fraction of blks that both have Hole_H and Particle_Hole terms:  0.0978
+Fraction of blks that both have Hole_Anything pairs:  0.4146
+Total size of ph blocks compared to size of full 2B matrix:  0.000455
+ 
+Time Taken to obtain ph_blocks--- 0.6467 Minutes ---
+Time Taken to obtain Minnesota Potential-- 6.9232 Minutes ---
+Time Taken to normal order potential-- 0.0006 Minutes ---
+ 
+Reference Energy/A (MeV): 12.4508
+ 
+s                E/A           DE(2)            DE(3)            E+DE            ||eta||          ||fod||          ||Gammaod||   
+------------------------------------------------------------------------------------------------------------------------------
+ 0.00000    12.45081966     -42.95072513       0.00000000     778.80337275       1.74509678       0.00000000     240.91811181
+ 1.00000    11.80065140      -0.51866062       0.00000000     778.32433202       0.25687488       0.00000000      18.50079465
+ 2.00000    11.79245275      -0.02981529       0.00000000     778.27206634       0.06799538       0.00000000       3.87258389
+ 3.00000    11.79182687      -0.00286512       0.00000000     778.25770840       0.02134570       0.00000000       1.17919618
+ 
+Time Taken to Run--- 26.3128 Minutes ---
+ 
+Correlation Energy/A (MeV): -0.659
+ 
+Energy per particle (MeV): 11.7918
+ 
+Fraction of blocks of Omega that stayed zero 0.6351326285 = 3424 / 5391
+ 
+ 
+This code uses precalculated magic numbers to determine Nmax for a given number of hole states
+Magic_Numbers.txt must be in same directory as this file
+ 
+Box Size (fm):  7.605904921522782
+Number of particles:  66
+Number of SP states: 514
+Number of blocks in bas2B:  5391
+Very crude estimate for memory demand of program (GB):  4.248
+ 
+Fraction of blks that both have Hole_H and Particle_Hole terms:  0.0978
+Fraction of blks that both have Hole_Anything pairs:  0.4146
+Total size of ph blocks compared to size of full 2B matrix:  0.000455
+ 
+Time Taken to obtain ph_blocks--- 0.6766 Minutes ---
+Time Taken to obtain Minnesota Potential-- 7.1156 Minutes ---
+Time Taken to normal order potential-- 0.0006 Minutes ---
+ 
+Reference Energy/A (MeV): 13.0487
+ 
+s                E/A           DE(2)            DE(3)            E+DE            ||eta||          ||fod||          ||Gammaod||   
+------------------------------------------------------------------------------------------------------------------------------
+ 0.00000    13.04872592     -49.70705039       0.00000000     811.50886035       1.78761693       0.00000000     269.18467510
+ 1.00000    12.29397766      -0.52251807       0.00000000     810.88000720       0.24729107       0.00000000      19.48296466
+ 2.00000    12.28574642      -0.02778673       0.00000000     810.83147667       0.06312432       0.00000000       3.89168986
+ 3.00000    12.28515267      -0.00256315       0.00000000     810.81751304       0.01947362       0.00000000       1.15637118
+ 
+Time Taken to Run--- 27.0782 Minutes ---
+ 
+Correlation Energy/A (MeV): -0.7636
+ 
+Energy per particle (MeV): 12.2852
+ 
+Fraction of blocks of Omega that stayed zero 0.6351326285 = 3424 / 5391
+ 
+ 
+This code uses precalculated magic numbers to determine Nmax for a given number of hole states
+Magic_Numbers.txt must be in same directory as this file
+ 
+Box Size (fm):  7.343420462049962
+Number of particles:  66
+Number of SP states: 514
+Number of blocks in bas2B:  5391
+Very crude estimate for memory demand of program (GB):  4.248
+ 
+Fraction of blks that both have Hole_H and Particle_Hole terms:  0.0978
+Fraction of blks that both have Hole_Anything pairs:  0.4146
+Total size of ph blocks compared to size of full 2B matrix:  0.000455
+ 
+Time Taken to obtain ph_blocks--- 0.6658 Minutes ---
+Time Taken to obtain Minnesota Potential-- 7.0202 Minutes ---
+Time Taken to normal order potential-- 0.0006 Minutes ---
+ 
+Reference Energy/A (MeV): 13.5683
+ 
+s                E/A           DE(2)            DE(3)            E+DE            ||eta||          ||fod||          ||Gammaod||   
+------------------------------------------------------------------------------------------------------------------------------
+ 0.00000    13.56826050     -56.11005132       0.00000000     839.39514145       1.82367675       0.00000000     295.12347197
+ 1.00000    12.71386435      -0.53040566       0.00000000     838.58464141       0.23930948       0.00000000      20.56486674
+ 2.00000    12.70552865      -0.02575171       0.00000000     838.53913929       0.05863926       0.00000000       3.88856321
+ 3.00000    12.70496893      -0.00226521       0.00000000     838.52568418       0.01773500       0.00000000       1.12233781
+ 
+Time Taken to Run--- 26.354 Minutes ---
+ 
+Correlation Energy/A (MeV): -0.8633
+ 
+Energy per particle (MeV): 12.705
+ 
+Fraction of blocks of Omega that stayed zero 0.6351326285 = 3424 / 5391
+ 
+ 
+This code uses precalculated magic numbers to determine Nmax for a given number of hole states
+Magic_Numbers.txt must be in same directory as this file
+ 
+Box Size (fm):  7.113786608980124
+Number of particles:  66
+Number of SP states: 514
+Number of blocks in bas2B:  5391
+Very crude estimate for memory demand of program (GB):  4.248
+ 
+Fraction of blks that both have Hole_H and Particle_Hole terms:  0.0978
+Fraction of blks that both have Hole_Anything pairs:  0.4146
+Total size of ph blocks compared to size of full 2B matrix:  0.000455
+ 
+Time Taken to obtain ph_blocks--- 0.6806 Minutes ---
+Time Taken to obtain Minnesota Potential-- 7.048 Minutes ---
+Time Taken to normal order potential-- 0.0006 Minutes ---
+ 
+Reference Energy/A (MeV): 14.0169
+ 
+s                E/A           DE(2)            DE(3)            E+DE            ||eta||          ||fod||          ||Gammaod||   
+------------------------------------------------------------------------------------------------------------------------------
+ 0.00000    14.01689099     -62.06092036       0.00000000     863.05388507       1.85278357       0.00000000     318.84547009
+ 1.00000    13.06936315      -0.54271012       0.00000000     862.03525792       0.23265497       0.00000000      21.77659392
+ 2.00000    13.06084192      -0.02380180       0.00000000     861.99176519       0.05453930       0.00000000       3.87245223
+ 3.00000    13.06031622      -0.00198388       0.00000000     861.97888682       0.01613504       0.00000000       1.08083057
+ 
+Time Taken to Run--- 26.4968 Minutes ---
+ 
+Correlation Energy/A (MeV): -0.9566
+ 
+Energy per particle (MeV): 13.0603
+ 
+Fraction of blocks of Omega that stayed zero 0.6351326285 = 3424 / 5391
+ 
+ 
+This code uses precalculated magic numbers to determine Nmax for a given number of hole states
+Magic_Numbers.txt must be in same directory as this file
+ 
+Box Size (fm):  6.910423230011183
+Number of particles:  66
+Number of SP states: 514
+Number of blocks in bas2B:  5391
+Very crude estimate for memory demand of program (GB):  4.248
+ 
+Fraction of blks that both have Hole_H and Particle_Hole terms:  0.0978
+Fraction of blks that both have Hole_Anything pairs:  0.4146
+Total size of ph blocks compared to size of full 2B matrix:  0.000455
+ 
+Time Taken to obtain ph_blocks--- 0.6733 Minutes ---
+Time Taken to obtain Minnesota Potential-- 7.1174 Minutes ---
+Time Taken to normal order potential-- 0.0006 Minutes ---
+ 
+Reference Energy/A (MeV): 14.4008
+ 
+s                E/A           DE(2)            DE(3)            E+DE            ||eta||          ||fod||          ||Gammaod||   
+------------------------------------------------------------------------------------------------------------------------------
+ 0.00000    14.40083003     -67.51350446       0.00000000     882.94127772       1.87521154       0.00000000     340.50846066
+ 1.00000    13.36748656      -0.55908748       0.00000000     881.69502516       0.22704164       0.00000000      23.11882031
+ 2.00000    13.35870263      -0.02200026       0.00000000     881.65237329       0.05081402       0.00000000       3.85264716
+ 3.00000    13.35820956      -0.00172641       0.00000000     881.64010469       0.01467265       0.00000000       1.03503100
+ 
+Time Taken to Run--- 26.686 Minutes ---
+ 
+Correlation Energy/A (MeV): -1.0426
+ 
+Energy per particle (MeV): 13.3582
+ 
+Fraction of blocks of Omega that stayed zero 0.6351326285 = 3424 / 5391
+ 
+JobId=66587932 JobName=simple_eos
+   UserId=udianiom(919069) GroupId=cse(2010) MCS_label=N/A
+   Priority=35608 Nice=0 Account=general QOS=udianiom
+   JobState=RUNNING Reason=None Dependency=(null)
+   Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   RunTime=05:45:57 TimeLimit=15:00:00 TimeMin=N/A
+   SubmitTime=2020-07-25T18:00:54 EligibleTime=2020-07-25T18:00:54
+   AccrueTime=2020-07-25T18:00:54
+   StartTime=2020-07-26T18:33:41 EndTime=2020-07-27T09:33:41 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2020-07-26T18:33:41
+   Partition=general-long-bigmem AllocNode:Sid=dev-intel18:7477
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=qml-000
+   BatchHost=qml-000
+   NumNodes=1 NumCPUs=8 NumTasks=1 CPUs/Task=8 ReqB:S:C:T=0:0:*:*
+   TRES=cpu=8,mem=1600G,node=1,billing=249036
+   Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=*
+   MinCPUsNode=8 MinMemoryCPU=200G MinTmpDiskNode=0
+   Features=[intel14|intel16|intel18] DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) Network=(null)
+   Command=/mnt/ufs18/home-098/udianiom/Yani_IMSRG/submitjob11.sb
+   WorkDir=/mnt/ufs18/home-098/udianiom/Yani_IMSRG
+   Comment=stdout=/mnt/ufs18/home-098/udianiom/Yani_IMSRG/slurm-66587932.out 
+   StdErr=/mnt/ufs18/home-098/udianiom/Yani_IMSRG/slurm-66587932.out
+   StdIn=/dev/null
+   StdOut=/mnt/ufs18/home-098/udianiom/Yani_IMSRG/slurm-66587932.out
+   Power=
+
