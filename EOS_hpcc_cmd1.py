@@ -87,13 +87,19 @@ trunc = args.T #Set max # of terms in BCH and Magnus expansion
 ds = args.step #obtain step size if requested
 
 
-rhos = np.linspace(0.05, 0.2, num_points)
+#rhos = np.linspace(0.05, 0.2, num_points)
+
+rhos = np.array([0.02, 0.04, 0.06, 0.08, 0.1])
+
+#rhos = np.array([0.12, 0.14, 0.16, 0.18, 0.2])
+
+num_points = len(rhos)
 
 E = []
 
 fraction_zero = []
 
-for rho in np.linspace(0.05, 0.2, num_points):
+for rho in rhos:
   
   J_Dev5_cml.main(["--A", str(A), "--Nmax", str(N_Max), "--den", str(rho),
                    "--g", str(degen), "--DE", str(DE_flag), "--T", str(trunc),
