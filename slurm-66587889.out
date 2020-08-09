@@ -1,0 +1,63 @@
+ 
+This code uses precalculated magic numbers to determine Nmax for a given number of hole states
+Magic_Numbers.txt must be in same directory as this file
+ 
+Box Size (fm):  6.910423230011183
+Number of particles:  66
+Number of SP states: 1850
+Number of blocks in bas2B:  20595
+Very crude estimate for memory demand of program (GB):  196.9219
+ 
+Fraction of blks that both have Hole_H and Particle_Hole terms:  0.0256
+Fraction of blks that both have Hole_Anything pairs:  0.2827
+Total size of ph blocks compared to size of full 2B matrix:  0.00012
+ 
+Time Taken to obtain ph_blocks--- 9.0961 Minutes ---
+Time Taken to obtain Minnesota Potential-- 337.3115 Minutes ---
+Time Taken to normal order potential-- 0.0039 Minutes ---
+ 
+Reference Energy/A (MeV): 14.4008
+ 
+s                E/A           DE(2)            DE(3)            E+DE            ||eta||          ||fod||          ||Gammaod||   
+------------------------------------------------------------------------------------------------------------------------------
+ 0.00000    14.40083003     -95.53741898       0.00000000     854.91736319       2.00679898       0.00000000     470.87609161
+ 1.00000    12.99374555      -0.81224069       0.00000000     856.77496587       0.21738961       0.00000000      46.14878901
+ 2.00000    12.98131387      -0.02124516       0.00000000     856.74547020       0.04683819       0.00000000       4.61840272
+ 3.00000    12.98081041      -0.00158884       0.00000000     856.73189812       0.01371719       0.00000000       1.05946616
+ 
+Time Taken to Run--- 1745.4182 Minutes ---
+ 
+Correlation Energy/A (MeV): -1.42
+ 
+Energy per particle (MeV): 12.9808
+ 
+Fraction of blocks of Omega that stayed zero 0.738820102 = 15216 / 20595
+ 
+JobId=66587889 JobName=Test
+   UserId=udianiom(919069) GroupId=cse(2010) MCS_label=N/A
+   Priority=78051 Nice=0 Account=general QOS=udianiom
+   JobState=RUNNING Reason=None Dependency=(null)
+   Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   RunTime=1-11:07:48 TimeLimit=1-12:00:00 TimeMin=N/A
+   SubmitTime=2020-07-25T18:00:27 EligibleTime=2020-07-25T18:00:27
+   AccrueTime=2020-07-25T18:00:27
+   StartTime=2020-07-31T14:35:36 EndTime=2020-08-02T02:35:36 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2020-07-31T14:35:36
+   Partition=general-long-bigmem AllocNode:Sid=dev-intel18:7477
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=qml-005
+   BatchHost=qml-005
+   NumNodes=1 NumCPUs=8 NumTasks=1 CPUs/Task=8 ReqB:S:C:T=0:0:*:*
+   TRES=cpu=8,mem=3200G,node=1,billing=498073
+   Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=*
+   MinCPUsNode=8 MinMemoryCPU=400G MinTmpDiskNode=0
+   Features=[intel14|intel16|intel18] DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) Network=(null)
+   Command=/mnt/ufs18/home-098/udianiom/Yani_IMSRG/submitjob8.sb
+   WorkDir=/mnt/ufs18/home-098/udianiom/Yani_IMSRG
+   Comment=stdout=/mnt/ufs18/home-098/udianiom/Yani_IMSRG/slurm-66587889.out 
+   StdErr=/mnt/ufs18/home-098/udianiom/Yani_IMSRG/slurm-66587889.out
+   StdIn=/dev/null
+   StdOut=/mnt/ufs18/home-098/udianiom/Yani_IMSRG/slurm-66587889.out
+   Power=
+
