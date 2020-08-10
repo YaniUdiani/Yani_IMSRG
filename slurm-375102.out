@@ -1,0 +1,45 @@
+Lmod has detected the following error: Unable to load module because of error
+when evaluating modulefile:
+     /opt/modules/Core/Anaconda2/4.2.0.lua: Empty or non-existant file
+     Please check the modulefile and especially if there is a the line number
+specified in the above message 
+While processing the following module(s):
+    Module fullname  Module Filename
+    ---------------  ---------------
+    Anaconda2/4.2.0  /opt/modules/Core/Anaconda2/4.2.0.lua
+
+Traceback (most recent call last):
+  File "EOS_hpcc_cmd1.py", line 9, in <module>
+    import J_Dev5_cml
+  File "/mnt/ufs18/home-098/udianiom/Yani_IMSRG/J_Dev5_cml.py", line 17, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+srun: error: lac-225: task 0: Exited with exit code 1
+JobId=375102 JobName=simple_eos
+   UserId=udianiom(919069) GroupId=cse(2010) MCS_label=N/A
+   Priority=1785 Nice=0 Account=general QOS=udianiom
+   JobState=RUNNING Reason=None Dependency=(null)
+   Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   RunTime=00:00:04 TimeLimit=00:10:00 TimeMin=N/A
+   SubmitTime=2020-08-09T22:24:35 EligibleTime=2020-08-09T22:24:35
+   AccrueTime=2020-08-09T22:24:35
+   StartTime=2020-08-09T22:38:57 EndTime=2020-08-09T22:48:57 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2020-08-09T22:38:57
+   Partition=general-long AllocNode:Sid=dev-intel18:40637
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=lac-225
+   BatchHost=lac-225
+   NumNodes=1 NumCPUs=8 NumTasks=1 CPUs/Task=8 ReqB:S:C:T=0:0:*:*
+   TRES=cpu=8,mem=48G,node=1,billing=7471
+   Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=*
+   MinCPUsNode=8 MinMemoryCPU=6G MinTmpDiskNode=0
+   Features=[intel14|intel16|intel18|amd20] DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) Network=(null)
+   Command=/mnt/ufs18/home-098/udianiom/Yani_IMSRG/submitjob9.sb
+   WorkDir=/mnt/ufs18/home-098/udianiom/Yani_IMSRG
+   Comment=stdout=/mnt/ufs18/home-098/udianiom/Yani_IMSRG/slurm-375102.out 
+   StdErr=/mnt/ufs18/home-098/udianiom/Yani_IMSRG/slurm-375102.out
+   StdIn=/dev/null
+   StdOut=/mnt/ufs18/home-098/udianiom/Yani_IMSRG/slurm-375102.out
+   Power=
+

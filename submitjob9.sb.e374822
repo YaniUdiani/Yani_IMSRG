@@ -1,0 +1,17 @@
+Lmod has detected the following error: Unable to load module because of error
+when evaluating modulefile:
+     /opt/modules/Core/Anaconda2/4.2.0.lua: Empty or non-existant file
+     Please check the modulefile and especially if there is a the line number
+specified in the above message 
+While processing the following module(s):
+    Module fullname  Module Filename
+    ---------------  ---------------
+    Anaconda2/4.2.0  /opt/modules/Core/Anaconda2/4.2.0.lua
+
+Traceback (most recent call last):
+  File "EOS_hpcc_cmd1.py", line 9, in <module>
+    import J_Dev5_cml
+  File "/mnt/ufs18/home-098/udianiom/Yani_IMSRG/J_Dev5_cml.py", line 17, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+srun: error: lac-232: task 0: Exited with exit code 1

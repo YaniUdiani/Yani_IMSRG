@@ -1,0 +1,10 @@
+Lmod has detected the following error: Unable to load module because of error
+when evaluating modulefile:
+     /opt/modules/Core/Anaconda2/4.2.0.lua: Empty or non-existant file
+     Please check the modulefile and especially if there is a the line number
+specified in the above message 
+While processing the following module(s):
+    Module fullname  Module Filename
+    ---------------  ---------------
+    Anaconda2/4.2.0  /opt/modules/Core/Anaconda2/4.2.0.lua
+
