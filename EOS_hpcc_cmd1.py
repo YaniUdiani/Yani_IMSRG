@@ -6,7 +6,7 @@ Created on Mon Jul 20 20:30:50 2020
 @author: YaniUdiani
 """
 
-import J_Dev5_cml
+import J_Dev5_cml1
 
 import numpy as np
 
@@ -23,7 +23,7 @@ f = open("Magic_Numbers.txt", "r")
 Magic_Numbers = f.read() #Magic numbers from N_max = 0 : N_max = 200
 #Magic_Numbers[0] is 0th shell  
 
-Magic_Numbers = J_Dev5_cml.pre_process(Magic_Numbers)# convert them into list of ints
+Magic_Numbers = J_Dev5_cml1.pre_process(Magic_Numbers)# convert them into list of ints
 
 #Magic.append(Magic_Numbers)
 
@@ -101,11 +101,11 @@ fraction_zero = []
 
 for rho in rhos:
   
-  J_Dev5_cml.main(["--A", str(A), "--Nmax", str(N_Max), "--den", str(rho),
+  J_Dev5_cml1.main(["--A", str(A), "--Nmax", str(N_Max), "--den", str(rho),
                    "--g", str(degen), "--DE", str(DE_flag), "--T", str(trunc),
                    "--step", str(ds) ])#execute main
   
-  res = J_Dev5_cml.results[0] #retrieve results from completed run
+  res = J_Dev5_cml1.results[0] #retrieve results from completed run
   
   E.append(res[0]/A)
   
